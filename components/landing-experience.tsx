@@ -192,7 +192,7 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
         <div className="origin-mark"><SignalGlyph /></div>
         <div>
           <h2>Built because financial data should lead somewhere.</h2>
-          <p>I started Earnings Delta after interviewing for a Full Stack Developer role at Fiscal.ai. The conversation sharpened a question I wanted to answer by building: how can structured financial data, earnings reports, transcripts, and AI become one trustworthy research workflow?</p>
+          <p>I started Earnings Delta after an email exchange about a Full Stack Developer role at Fiscal.ai and a recorded video interview rather than a live conversation. The process left me with a question I wanted to answer by building: how can structured financial data, earnings reports, transcripts, and AI become one trustworthy research workflow?</p>
           <p>This is the result: a working exploration of how investors can move from a reported number to a verified point of view without breaking the chain of evidence.</p>
         </div>
       </section>
@@ -206,7 +206,11 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
         </div>
       </section>
 
-      <footer className="landing-footer"><span>Earnings Delta</span><span>Evidence-first financial research</span><span>Toronto · 2026</span></footer>
+      <footer className="landing-footer">
+        <span>Earnings Delta</span>
+        <span>Evidence-first financial research</span>
+        <a href="https://portfolio-khaki-sigma-74.vercel.app">Built by Mihirsinh Chavda <ExternalIcon /></a>
+      </footer>
     </main>
   );
 }
