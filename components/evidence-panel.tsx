@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import type { Insight } from "@/lib/types";
 
 function CloseIcon() {
@@ -5,8 +8,54 @@ function CloseIcon() {
 }
 
 export function EvidencePanel({ insight, open, onClose }: { insight: Insight | null; open: boolean; onClose: () => void }) {
+  const panelRef = useRef<HTMLElement>(null);
+  const previousFocus = useRef<HTMLElement | null>(null);
+  const [overlay, setOverlay] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1180px)");
+    const update = () => setOverlay(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (!overlay) return;
+    if (open) {
+      previousFocus.current = document.activeElement as HTMLElement | null;
+      panelRef.current?.focus();
+      return;
+    }
+    previousFocus.current?.focus();
+  }, [open, overlay]);
+
+  function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (!overlay || !open) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onClose();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const focusable = Array.from(panelRef.current?.querySelectorAll<HTMLElement>("button, a, input, select, textarea, [tabindex]:not([tabindex='-1'])") ?? []).filter((element) => !element.hasAttribute("disabled"));
+    if (focusable.length === 0) {
+      event.preventDefault();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable.at(-1)!;
+    if (event.shiftKey && (document.activeElement === first || document.activeElement === panelRef.current)) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
   return (
-    <aside className={`evidence-panel ${open ? "is-open" : ""}`} aria-label="Insight evidence" aria-hidden={!insight}>
+    <aside ref={panelRef} className={`evidence-panel ${open ? "is-open" : ""}`} role={overlay ? "dialog" : "complementary"} aria-modal={overlay && open ? true : undefined} aria-label="Insight evidence" aria-hidden={overlay ? !open : !insight} tabIndex={overlay ? -1 : undefined} onKeyDown={handleKeyDown}>
       {insight ? (
         <>
           <header className="evidence-header">

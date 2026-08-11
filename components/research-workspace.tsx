@@ -17,6 +17,10 @@ function EvidenceIcon() {
   return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3h8l3 3v11H5V3Z" /><path d="M13 3v4h3M8 10h5M8 13h5" /></svg>;
 }
 
+function SignalTrace() {
+  return <svg viewBox="0 0 320 64" aria-hidden="true"><path d="M2 40h52l11-17 18 31 17-45 20 31h42l10-10 13 10h133" /></svg>;
+}
+
 function formatDelta(value: number | null, margin = false) {
   if (value === null) return "n/m";
   return `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}${margin ? " pp" : "%"}`;
@@ -60,6 +64,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
 
   return (
     <main className="research-shell">
+      <div className="workspace-ambient" aria-hidden="true" />
       <header className="terminal-header">
         <Link className="wordmark" href="/"><span className="delta-mark">Δ</span> Earnings Delta</Link>
         <div className="company-search">
@@ -80,6 +85,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
           <span className="ticker-block">{analysis.company.ticker}</span>
           <div><h1>{analysis.company.name}</h1><p>{analysis.company.exchange} · {analysis.company.sector} · Period ended {analysis.currentPeriod.ended}</p></div>
         </div>
+        <div className="issuer-trace"><SignalTrace /><span>Period signal acquired</span></div>
         <div className="period-control">
           <span>Compare {analysis.currentPeriod.label}</span>
           <div role="group" aria-label="Comparison period">
@@ -114,7 +120,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
             <span>{analysis.insights.length} material observations</span>
           </div>
           <div className="change-list change-list-primary">{analysis.insights.slice(0, 1).map(renderInsight)}</div>
-          <AskDelta ticker={analysis.company.ticker} mode={mode} />
+          <AskDelta key={`${analysis.company.ticker}-${mode}`} ticker={analysis.company.ticker} mode={mode} />
           <div className="change-list change-list-rest">{analysis.insights.slice(1).map((insight, index) => renderInsight(insight, index + 1))}</div>
         </section>
         <EvidencePanel insight={selected} open={evidenceOpen} onClose={() => setEvidenceOpen(false)} />

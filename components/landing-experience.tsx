@@ -1,7 +1,10 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+
+const Beams = dynamic(() => import("@/components/beams"), { ssr: false });
 
 type Direction = "favorable" | "unfavorable" | "neutral";
 
@@ -23,7 +26,7 @@ export interface LandingPreview {
 }
 
 function ArrowIcon() {
-  return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" /></svg>;
+  return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" /></svg>;
 }
 
 function ExternalIcon() {
@@ -34,6 +37,16 @@ function DeltaMark() {
   return <span className="delta-mark" aria-hidden="true">Δ</span>;
 }
 
+function SignalGlyph() {
+  return (
+    <svg className="signal-glyph" viewBox="0 0 120 120" aria-hidden="true">
+      <path className="glyph-orbit" d="M11 60h28l9-28 18 56 9-28h34" />
+      <circle cx="60" cy="60" r="48" />
+      <circle className="glyph-core" cx="60" cy="60" r="6" />
+    </svg>
+  );
+}
+
 export function LandingExperience({ previews }: { previews: LandingPreview[] }) {
   const [ticker, setTicker] = useState(previews[0]?.ticker ?? "NVDA");
   const active = useMemo(() => previews.find((preview) => preview.ticker === ticker) ?? previews[0], [previews, ticker]);
@@ -42,156 +55,158 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
 
   return (
     <main className="landing-shell">
-      <header className="landing-header">
-        <nav className="landing-nav" aria-label="Primary navigation">
-          <Link className="wordmark" href="/"><DeltaMark /> Earnings Delta</Link>
-          <div className="landing-nav-links">
-            <a href="#product">Product</a>
-            <a href="#method">Method</a>
-            <a href="#why">Why I Built This</a>
-            <a href="https://github.com/mihhhir08/earnings-delta">GitHub</a>
-          </div>
-          <Link className="nav-action" href={active.href}>Open research <ArrowIcon /></Link>
-        </nav>
-      </header>
-
-      <section className="landing-hero" id="product">
-        <div className="hero-copy">
-          <h1>The quarter changed. <span>Find out where.</span></h1>
-          <p>Earnings Delta turns period-over-period financials into a ranked, auditable research brief. See the movement, understand the driver, and inspect the evidence behind the conclusion.</p>
-          <div className="hero-actions">
-            <Link className="primary-action" href={active.href}>Explore {active.ticker} research <ArrowIcon /></Link>
-            <a className="secondary-action" href="https://github.com/mihhhir08/earnings-delta">View GitHub <ExternalIcon /></a>
-          </div>
-          <div className="dataset-note" title="A representative dataset demonstrates the complete research workflow without presenting demo commentary as source filings.">
-            <span className="status-dot" /> Representative dataset
-          </div>
+      <section className="spectral-hero" id="product">
+        <div className="hero-beams" aria-hidden="true">
+          <Beams beamWidth={1.8} beamHeight={22} beamNumber={15} lightColor="#7fffd4" speed={1.25} noiseIntensity={1.35} scale={0.16} rotation={-17} />
         </div>
+        <div className="hero-shade" aria-hidden="true" />
 
-        <div className="product-stage" aria-label="Interactive product preview">
-          <div className="preview-company-tabs" role="group" aria-label="Preview company">
-            {previews.map((preview) => (
-              <button key={preview.ticker} className={active.ticker === preview.ticker ? "active" : ""} onClick={() => setTicker(preview.ticker)} aria-pressed={active.ticker === preview.ticker}>
-                <strong>{preview.ticker}</strong><span>{preview.name.replace(" Corporation", "").replace(" Inc.", "")}</span>
-              </button>
-            ))}
-          </div>
-          <article className="hero-proof" key={active.ticker}>
-            <div className="preview-topline">
-              <span className="preview-ticker">{active.ticker}</span>
-              <span>{active.period}</span>
-              <span className="preview-mode">{active.comparison}</span>
+        <header className="landing-header">
+          <nav className="landing-nav" aria-label="Primary navigation">
+            <Link className="wordmark" href="/"><DeltaMark /><span>Earnings Delta</span></Link>
+            <div className="landing-nav-links">
+              <a href="#method">Method</a>
+              <a href="#evidence">Evidence</a>
+              <a href="#why">Origin</a>
             </div>
-            <div className="preview-metrics">
+            <a className="nav-github" href="https://github.com/mihhhir08/earnings-delta">GitHub <ExternalIcon /></a>
+            <Link className="nav-action" href={active.href}>Enter workspace <ArrowIcon /></Link>
+          </nav>
+        </header>
+
+        <div className="hero-coordinate" aria-hidden="true"><span>43.6532° N</span><i /><span>79.3832° W</span></div>
+
+        <div className="hero-composition">
+          <div className="hero-copy">
+            <h1>Every quarter leaves a signal. <span>Trace it.</span></h1>
+            <p>Earnings Delta separates reported performance into the movements, drivers, and evidence that deserve your attention.</p>
+            <div className="hero-actions">
+              <Link className="primary-action" href={active.href}>Analyze {active.ticker} <ArrowIcon /></Link>
+              <a className="secondary-action" href="#method">See the method</a>
+            </div>
+            <div className="hero-status"><span className="status-dot" />Representative dataset <i /> Three companies <i /> Five reporting periods</div>
+          </div>
+
+          <div className="analysis-prism" role="region" aria-label="Interactive product preview">
+            <div className="prism-header">
+              <span>Signal acquisition</span>
+              <div className="preview-company-tabs" role="group" aria-label="Preview company">
+                {previews.map((preview) => (
+                  <button key={preview.ticker} className={active.ticker === preview.ticker ? "active" : ""} onClick={() => setTicker(preview.ticker)} aria-pressed={active.ticker === preview.ticker}>
+                    {preview.ticker}
+                  </button>
+                ))}
+              </div>
+              <span className="prism-state"><i />Locked</span>
+            </div>
+
+            <div className="prism-body" key={active.ticker}>
+              <div className="prism-period">
+                <span>Current</span><strong>{active.period}</strong>
+                <i />
+                <span>Reference</span><strong>{active.comparison.replace("vs. ", "")}</strong>
+              </div>
+              <div className="prism-core"><SignalGlyph /><span>Δ</span></div>
+              <div className="prism-result">
+                <div><span>Primary observation</span><b>{active.insight.confidence}</b></div>
+                <h2>{active.insight.title}</h2>
+                <p>{active.insight.summary}</p>
+                <div className="confidence-track"><span style={{ width: `${active.insight.score}%` }} /><small>Materiality {active.insight.score}</small></div>
+              </div>
+            </div>
+
+            <div className="prism-metrics">
               {active.metrics.map((metric) => (
                 <div key={metric.label}>
-                  <span>{metric.label}</span>
-                  <strong>{metric.value}</strong>
-                  <small className={metric.direction}>{metric.change}</small>
+                  <span>{metric.label}</span><strong>{metric.value}</strong><small className={metric.direction}>{metric.change}</small>
                 </div>
               ))}
             </div>
-            <div className="preview-case">
-              <div className="case-rank">01</div>
-              <div>
-                <div className="preview-label"><span>Top observation</span><span>{active.insight.confidence}</span><span>Materiality {active.insight.score}</span></div>
-                <h2>{active.insight.title}</h2>
-                <p>{active.insight.summary}</p>
-                <div className="evidence-chain" aria-label="Evidence path">
-                  <span>Claim</span><i /><span>Calculation</span><i /><span>Source</span><i /><span>Confidence</span>
-                </div>
-              </div>
-            </div>
-            <Link className="preview-footer" href={active.href}><span>Open the complete company record</span><ArrowIcon /></Link>
-          </article>
-        </div>
-      </section>
-
-      <section className="story-intro">
-        <p>Four moves, one continuous research trail.</p>
-        <h2>Move from a reported number to a defensible point of view without losing the path back to evidence.</h2>
-        <ol className="story-sequence" aria-label="Research workflow">
-          <li><strong>What changed</strong><span>Measure the period movement</span></li>
-          <li><strong>Why it changed</strong><span>Surface the operating driver</span></li>
-          <li><strong>Verify it</strong><span>Inspect the calculation and source</span></li>
-          <li><strong>Ask further</strong><span>Continue from grounded context</span></li>
-        </ol>
-      </section>
-
-      <section className="story-section story-change">
-        <div className="story-copy">
-          <span className="story-step">What changed</span>
-          <h2>Start with material movement, not a wall of metrics.</h2>
-          <p>The financial condition is visible at a glance, then the largest observations are ordered by magnitude, relevance, and evidence strength.</p>
-        </div>
-        <div className="story-artifact change-artifact">
-          <header><strong>{active.ticker}</strong><span>{active.period}</span><span>{active.comparison}</span></header>
-          {active.metrics.map((metric, index) => (
-            <div className={index === 0 ? "artifact-row primary" : "artifact-row"} key={metric.label}>
-              <span>{String(index + 1).padStart(2, "0")}</span><strong>{metric.label}</strong><b>{metric.value}</b><small className={metric.direction}>{metric.change}</small>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="story-section story-evidence">
-        <div className="story-copy">
-          <span className="story-step">Why and verify</span>
-          <h2>A conclusion earns its place by showing its work.</h2>
-          <p>Every material observation can carry a direct calculation, representative source context, and a confidence boundary. The evidence is attached to the claim, not buried in a separate view.</p>
-        </div>
-        <div className="story-artifact evidence-artifact">
-          <div className="artifact-claim"><span>Claim</span><h3>{active.insight.title}</h3><p>{active.insight.summary}</p></div>
-          <div className="artifact-evidence-grid">
-            <div><span>Calculation</span><p>{active.insight.calculation}</p></div>
-            <div><span>Source</span><p>{active.insight.source}</p></div>
-            <div><span>Confidence</span><strong>{active.insight.confidence}</strong></div>
+            <Link className="prism-footer" href={active.href}><span>Open complete research record</span><ArrowIcon /></Link>
           </div>
         </div>
+
+        <a className="scroll-cue" href="#method"><span>Follow the signal</span><i /></a>
       </section>
 
-      <section className="story-section story-ask">
-        <div className="story-copy">
-          <span className="story-step">Ask further</span>
-          <h2>Continue the analysis from the company record already in view.</h2>
-          <p>Ask a natural follow-up and receive a concise answer grounded in the current period, comparison, calculations, and linked evidence.</p>
+      <section className="signal-method" id="method">
+        <div className="method-intro">
+          <h2>One quarter in. Four research states out.</h2>
+          <p>The system establishes the reported movement before it forms an interpretation. Every step remains inspectable.</p>
         </div>
-        <div className="story-artifact ask-artifact">
-          <div className="ask-demo-question"><span>You</span><p>What was the main driver of the revenue change?</p></div>
-          <div className="ask-demo-answer"><span>Delta</span><p>{active.insight.summary}</p><small>Grounded in the current company record</small></div>
+        <div className="signal-path" aria-label="Research method">
+          <div><span>01</span><strong>Measure</strong><p>Normalize the periods and calculate the movement.</p></div>
+          <i />
+          <div><span>02</span><strong>Decompose</strong><p>Find the operating segment or financial relationship behind it.</p></div>
+          <i />
+          <div><span>03</span><strong>Rank</strong><p>Order observations by materiality and evidence strength.</p></div>
+          <i />
+          <div><span>04</span><strong>Ground</strong><p>Attach the calculation, source context, and confidence boundary.</p></div>
         </div>
       </section>
 
-      <section className="method-section" id="method">
+      <section className="decomposition-section">
+        <div className="decomposition-heading">
+          <h2>A quarter, decomposed.</h2>
+          <p>Switch the company above and this entire signal changes with it. The interface is driven by the same calculation engine as the workspace.</p>
+        </div>
+        <div className="decomposition-instrument">
+          <div className="instrument-scale" aria-hidden="true">{Array.from({ length: 11 }, (_, index) => <span key={index}>{index * 10}</span>)}</div>
+          <div className="instrument-company"><strong>{active.ticker}</strong><span>{active.name}</span><small>{active.period}</small></div>
+          <div className="instrument-observation">
+            <span>Highest materiality</span><h3>{active.insight.title}</h3><p>{active.insight.summary}</p>
+          </div>
+          <div className="instrument-readout"><span>Score</span><strong>{active.insight.score}</strong><small>/ 100</small></div>
+          <Link href={active.href}>Inspect the calculation <ArrowIcon /></Link>
+        </div>
+      </section>
+
+      <section className="evidence-section" id="evidence">
+        <div className="evidence-beam" aria-hidden="true"><i /><span /><i /><span /><i /></div>
+        <div className="evidence-copy">
+          <h2>Reasoning you can walk backward.</h2>
+          <p>A conclusion is only useful when the path behind it stays visible. Earnings Delta binds every observation to the underlying calculation, representative source context, and an explicit confidence state.</p>
+        </div>
+        <div className="evidence-spectrum">
+          <article><span>Claim</span><h3>{active.insight.title}</h3><p>{active.insight.summary}</p></article>
+          <article><span>Calculation</span><p>{active.insight.calculation}</p></article>
+          <article><span>Source</span><p>{active.insight.source}</p></article>
+          <article><span>Confidence</span><strong>{active.insight.confidence}</strong><small>Evidence remains distinguishable from interpretation.</small></article>
+        </div>
+      </section>
+
+      <section className="question-section">
+        <div className="question-interface">
+          <div className="question-title"><DeltaMark /><span>Research continuation</span><i>Evidence linked</i></div>
+          <div className="question-line"><span>You</span><p>What drove the most material change this quarter?</p></div>
+          <div className="answer-line-demo"><span>Delta</span><p>{active.insight.summary}</p><small>Grounded in {active.period} and its comparison record</small></div>
+        </div>
+        <div className="question-copy">
+          <h2>Keep asking without losing context.</h2>
+          <p>Continue from the company, period, calculations, and evidence already on screen. The research trail stays intact.</p>
+          <Link href={active.href}>Ask about {active.ticker} <ArrowIcon /></Link>
+        </div>
+      </section>
+
+      <section className="origin-section" id="why">
+        <div className="origin-mark"><SignalGlyph /></div>
         <div>
-          <h2>Research discipline, expressed in the product.</h2>
-          <p>The interface follows the same order as the analysis: establish facts, rank significance, attach evidence, then interpret.</p>
-        </div>
-        <div className="principles">
-          <article><span>01</span><h3>Calculate before interpreting</h3><p>Period comparisons and materiality are established in code before any explanation is written.</p></article>
-          <article><span>02</span><h3>Keep evidence attached</h3><p>The claim, math, source context, and confidence state travel together.</p></article>
-          <article><span>03</span><h3>Make complexity earn its place</h3><p>Each control supports a real research decision. Anything else stays out of the way.</p></article>
-        </div>
-      </section>
-
-      <section className="why-section" id="why">
-        <div className="why-marker"><DeltaMark /></div>
-        <div>
-          <h2>Why I built Earnings Delta</h2>
-          <p>I built this after interviewing for a Full Stack Developer role at Fiscal.ai. The conversation made me think more deeply about how structured financial data, earnings reports, transcripts, and AI could work together in one evidence-first research workflow.</p>
-          <p>I wanted to explore that idea by building it: a product that helps investors identify the most important change in a quarter, understand what drove it, and verify the reasoning without leaving the analysis.</p>
+          <h2>Built because financial data should lead somewhere.</h2>
+          <p>I started Earnings Delta after interviewing for a Full Stack Developer role at Fiscal.ai. The conversation sharpened a question I wanted to answer by building: how can structured financial data, earnings reports, transcripts, and AI become one trustworthy research workflow?</p>
+          <p>This is the result: a working exploration of how investors can move from a reported number to a verified point of view without breaking the chain of evidence.</p>
         </div>
       </section>
 
       <section className="closing-section">
-        <h2>Read the quarter as a chain of evidence.</h2>
+        <div className="closing-signal" aria-hidden="true"><span /><span /><span /><span /><span /></div>
+        <h2>Find the signal in the quarter.</h2>
         <div>
-          <Link className="primary-action signal-action" href={active.href}>Explore the research workspace <ArrowIcon /></Link>
+          <Link className="primary-action" href={active.href}>Enter the research workspace <ArrowIcon /></Link>
           <a className="footer-github" href="https://github.com/mihhhir08/earnings-delta">View source on GitHub <ExternalIcon /></a>
         </div>
       </section>
 
-      <footer className="landing-footer"><span>Earnings Delta</span><span>Evidence-first financial research</span><span>Built in Toronto</span></footer>
+      <footer className="landing-footer"><span>Earnings Delta</span><span>Evidence-first financial research</span><span>Toronto · 2026</span></footer>
     </main>
   );
 }

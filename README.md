@@ -30,7 +30,7 @@ Earnings Delta is one Next.js App Router application deployed through Vercel. St
 
 ## Tech Stack
 
-Next.js, React, TypeScript, Tailwind CSS, Zod, Vitest, and Vercel.
+Next.js, React, TypeScript, Tailwind CSS, Three.js with React Three Fiber, Zod, Vitest, and Vercel.
 
 ## Material Change Detection
 

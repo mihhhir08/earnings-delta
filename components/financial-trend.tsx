@@ -19,6 +19,7 @@ function valueLabel(metric: TrendMetric, value: number) {
 export function FinancialTrend({ points }: { points: TrendPoint[] }) {
   const [metric, setMetric] = useState<TrendMetric>("revenue");
   const titleId = useId();
+  const valuesId = useId();
   const values = points.map((point) => point[metric]).filter((value): value is number => value !== null);
   const minimum = Math.min(...values);
   const maximum = Math.max(...values);
@@ -48,8 +49,11 @@ export function FinancialTrend({ points }: { points: TrendPoint[] }) {
         </div>
       </div>
       <div className="trend-chart">
-        <svg viewBox="0 0 640 180" role="img" aria-label={`${selectedMetric} from ${points[0]?.period} to ${points.at(-1)?.period}`}>
+        <svg viewBox="0 0 640 180" role="img" aria-label={`${selectedMetric} from ${points[0]?.period} to ${points.at(-1)?.period}`} aria-describedby={valuesId}>
           {[40, 86, 132].map((y) => <line className="trend-gridline" x1="42" x2="598" y1={y} y2={y} key={y} />)}
+          <text className="trend-axis-value" x="34" y="43" textAnchor="end">{valueLabel(metric, maximum)}</text>
+          <text className="trend-axis-value" x="34" y="89" textAnchor="end">{valueLabel(metric, minimum + range / 2)}</text>
+          <text className="trend-axis-value" x="34" y="135" textAnchor="end">{valueLabel(metric, minimum)}</text>
           <path className="trend-path" d={path} pathLength="1" />
           {coordinates.map((point, index) => (
             <g key={point.period}>
@@ -63,6 +67,9 @@ export function FinancialTrend({ points }: { points: TrendPoint[] }) {
             </text>
           )}
         </svg>
+        <div className="trend-readouts" id={valuesId}>
+          {coordinates.map((point) => <span key={point.period}><small>{point.period}</small><strong>{valueLabel(metric, point.value)}</strong></span>)}
+        </div>
       </div>
     </section>
   );
