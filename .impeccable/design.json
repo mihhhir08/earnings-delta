@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-11T17:00:05Z",
+  "title": "Design System: Earnings Delta",
+  "extensions": {
+    "colorMeta": {
+      "cobalt-action": { "role": "primary", "displayName": "Cobalt Action", "canonical": "#1649d8", "tonalRamp": ["oklch(20% 0.12 262)", "oklch(30% 0.16 262)", "#0f3295", "#1649d8", "oklch(62% 0.18 262)", "oklch(74% 0.13 262)", "oklch(86% 0.07 262)", "oklch(95% 0.025 262)"] },
+      "cobalt-deep": { "role": "primary", "displayName": "Cobalt Deep", "canonical": "#0f3295", "tonalRamp": ["oklch(18% 0.09 262)", "oklch(25% 0.13 262)", "#0f3295", "oklch(47% 0.17 262)", "oklch(60% 0.14 262)", "oklch(73% 0.10 262)", "oklch(86% 0.05 262)", "oklch(95% 0.02 262)"] },
+      "signal-yellow": { "role": "secondary", "displayName": "Signal Yellow", "canonical": "#f1d94b", "tonalRamp": ["oklch(20% 0.05 98)", "oklch(31% 0.08 98)", "oklch(43% 0.11 98)", "oklch(56% 0.14 98)", "oklch(69% 0.15 98)", "#f1d94b", "oklch(89% 0.12 98)", "oklch(95% 0.06 98)"] },
+      "favorable-teal": { "role": "tertiary", "displayName": "Favorable Teal", "canonical": "#147d6f", "tonalRamp": ["oklch(18% 0.04 178)", "oklch(28% 0.07 178)", "oklch(39% 0.09 178)", "#147d6f", "oklch(59% 0.10 178)", "oklch(72% 0.08 178)", "oklch(85% 0.045 178)", "oklch(95% 0.018 178)"] },
+      "unfavorable-rust": { "role": "tertiary", "displayName": "Unfavorable Rust", "canonical": "#a7482d", "tonalRamp": ["oklch(18% 0.05 37)", "oklch(28% 0.09 37)", "oklch(39% 0.12 37)", "#a7482d", "oklch(60% 0.14 37)", "oklch(73% 0.10 37)", "oklch(86% 0.05 37)", "oklch(95% 0.02 37)"] },
+      "interpretation-violet": { "role": "tertiary", "displayName": "Interpretation Violet", "canonical": "#6944a8", "tonalRamp": ["oklch(18% 0.06 304)", "oklch(28% 0.10 304)", "oklch(39% 0.13 304)", "#6944a8", "oklch(61% 0.14 304)", "oklch(74% 0.10 304)", "oklch(86% 0.05 304)", "oklch(95% 0.02 304)"] },
+      "cool-paper": { "role": "neutral", "displayName": "Cool Paper", "canonical": "#f4f6f8", "tonalRamp": ["oklch(15% 0.008 245)", "oklch(28% 0.008 245)", "oklch(41% 0.008 245)", "oklch(55% 0.008 245)", "oklch(68% 0.008 245)", "oklch(80% 0.008 245)", "oklch(90% 0.008 245)", "#f4f6f8"] },
+      "paper-white": { "role": "neutral", "displayName": "Paper White", "canonical": "#ffffff", "tonalRamp": ["oklch(15% 0 0)", "oklch(28% 0 0)", "oklch(41% 0 0)", "oklch(55% 0 0)", "oklch(68% 0 0)", "oklch(80% 0 0)", "oklch(91% 0 0)", "#ffffff"] },
+      "graphite-ink": { "role": "neutral", "displayName": "Graphite Ink", "canonical": "#111820", "tonalRamp": ["#111820", "oklch(27% 0.014 245)", "oklch(39% 0.014 245)", "oklch(52% 0.014 245)", "oklch(65% 0.012 245)", "oklch(77% 0.01 245)", "oklch(88% 0.006 245)", "oklch(95% 0.003 245)"] },
+      "muted-graphite": { "role": "neutral", "displayName": "Muted Graphite", "canonical": "#5f6c78", "tonalRamp": ["oklch(15% 0.014 245)", "oklch(27% 0.014 245)", "oklch(39% 0.014 245)", "#5f6c78", "oklch(65% 0.012 245)", "oklch(77% 0.01 245)", "oklch(88% 0.006 245)", "oklch(95% 0.003 245)"] },
+      "ledger-rule": { "role": "neutral", "displayName": "Ledger Rule", "canonical": "#cbd2d9", "tonalRamp": ["oklch(15% 0.008 245)", "oklch(28% 0.008 245)", "oklch(41% 0.008 245)", "oklch(55% 0.008 245)", "oklch(68% 0.008 245)", "oklch(78% 0.008 245)", "#cbd2d9", "oklch(95% 0.004 245)"] },
+      "ledger-rule-dark": { "role": "neutral", "displayName": "Ledger Rule Dark", "canonical": "#9ba6b1", "tonalRamp": ["oklch(15% 0.01 245)", "oklch(28% 0.01 245)", "oklch(41% 0.01 245)", "oklch(55% 0.01 245)", "#9ba6b1", "oklch(77% 0.008 245)", "oklch(88% 0.005 245)", "oklch(95% 0.003 245)"] },
+      "focus-blue": { "role": "primary", "displayName": "Focus Blue", "canonical": "#006de5", "tonalRamp": ["oklch(18% 0.09 254)", "oklch(28% 0.14 254)", "oklch(39% 0.18 254)", "#006de5", "oklch(62% 0.18 254)", "oklch(74% 0.13 254)", "oklch(86% 0.07 254)", "oklch(95% 0.025 254)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Issuer Display", "purpose": "Issuer identity and principal record headings." },
+      "headline": { "displayName": "Material Claim", "purpose": "Ranked change claims and evidence headings." },
+      "body": { "displayName": "Research Body", "purpose": "Explanations, summaries, and grounded answers." },
+      "label": { "displayName": "Audit Label", "purpose": "Evidence IDs, classifications, dates, units, and scores." },
+      "value": { "displayName": "Financial Value", "purpose": "Aligned statement values and comparison deltas." }
+    },
+    "shadows": [
+      { "name": "action-lift", "value": "0 8px 20px rgba(22, 73, 216, .2)", "purpose": "Primary marketing action only." },
+      { "name": "ask-lift", "value": "0 10px 30px rgba(20, 32, 45, .13)", "purpose": "Separates the grounded question surface from ranked records." },
+      { "name": "drawer-lift", "value": "-18px 0 50px rgba(17, 24, 32, .22)", "purpose": "Responsive evidence drawer above the document." }
+    ],
+    "motion": [
+      { "name": "evidence-drawer", "value": "transform 220ms cubic-bezier(.16, 1, .3, 1)", "purpose": "Moves the evidence record into view below 1050px." },
+      { "name": "reduced-motion", "value": "0.01ms", "purpose": "Collapses animation and transition duration when reduced motion is requested." }
+    ],
+    "breakpoints": [
+      { "name": "workspace-collapse", "value": "1050px" },
+      { "name": "mobile-ledger", "value": "760px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single cobalt call to action, used for decisive navigation or submission.",
+      "html": "<button class=\"ds-btn-primary\">OPEN RESEARCH <span aria-hidden=\"true\">→</span></button>",
+      "css": ".ds-btn-primary { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 26px; padding: 0 20px; border: 0; border-radius: 0; background: var(--cobalt, #1649d8); color: white; font: 700 15px/1.2 Aptos, 'Segoe UI', sans-serif; cursor: pointer; box-shadow: 0 8px 20px rgba(22,73,216,.2); } .ds-btn-primary:hover { background: var(--cobalt-dark, #0f3295); } .ds-btn-primary:focus-visible { outline: 3px solid color-mix(in srgb, var(--focus, #006de5) 40%, transparent); outline-offset: 3px; } .ds-btn-primary:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Company Selector",
+      "kind": "input",
+      "description": "The compact issuer command field centered in the graphite header.",
+      "html": "<label class=\"ds-company\"><svg viewBox=\"0 0 20 20\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"9\" r=\"5\"/><path d=\"m13 13 4 4\"/></svg><select aria-label=\"Select company\"><option>NVDA — NVIDIA Corporation</option><option>AAPL — Apple Inc.</option></select></label>",
+      "css": ".ds-company { width: 340px; height: 34px; display: flex; align-items: center; gap: 9px; padding: 0 10px; background: #26313a; border: 1px solid #53616d; color: white; } .ds-company svg { width: 15px; fill: none; stroke: #aeb8c2; stroke-width: 1.65; stroke-linecap: square; stroke-linejoin: miter; } .ds-company select { min-width: 0; flex: 1; appearance: none; border: 0; outline: 0; background: transparent; color: white; font: 600 12px/1.2 Aptos, 'Segoe UI', sans-serif; cursor: pointer; } .ds-company:focus-within { outline: 3px solid color-mix(in srgb, var(--focus, #006de5) 40%, transparent); outline-offset: 3px; }"
+    },
+    {
+      "name": "Comparison Control",
+      "kind": "button",
+      "description": "A ruled two-segment control for selecting the active comparison period.",
+      "html": "<div class=\"ds-period\" role=\"group\" aria-label=\"Comparison period\"><button class=\"ds-period-active\">Previous quarter</button><button>Prior year</button></div>",
+      "css": ".ds-period { display: inline-flex; border: 1px solid var(--rule-dark, #9ba6b1); } .ds-period button { min-height: 34px; padding: 0 13px; border: 0; border-right: 1px solid var(--rule-dark, #9ba6b1); border-radius: 0; background: white; color: var(--ink, #111820); font: 400 11px/1.2 Aptos, 'Segoe UI', sans-serif; cursor: pointer; } .ds-period button:last-child { border-right: 0; } .ds-period button:hover { background: #f0f3f6; } .ds-period .ds-period-active { background: var(--cobalt, #1649d8); color: white; } .ds-period button:focus-visible { outline: 3px solid color-mix(in srgb, var(--focus, #006de5) 40%, transparent); outline-offset: 3px; position: relative; z-index: 1; }"
+    },
+    {
+      "name": "Evidence Classifications",
+      "kind": "chip",
+      "description": "Square labels distinguish materiality from evidence confidence without relying on color alone.",
+      "html": "<div class=\"ds-chips\"><span class=\"ds-importance\">HIGH IMPORTANCE</span><span class=\"ds-confidence\">SUPPORTED</span></div>",
+      "css": ".ds-chips { display: flex; align-items: center; gap: 8px; } .ds-importance, .ds-confidence { min-height: 20px; display: inline-flex; align-items: center; padding: 0 7px; border-radius: 0; font: 750 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .035em; white-space: nowrap; } .ds-importance { color: #4d4000; background: var(--signal, #f1d94b); } .ds-confidence { color: #4d4000; background: transparent; border: 1px solid #beaa32; }"
+    },
+    {
+      "name": "Metric Ledger Cell",
+      "kind": "card",
+      "description": "A ruled financial cell showing the current value and both comparison contexts.",
+      "html": "<article class=\"ds-metric\"><span class=\"ds-metric-label\">REVENUE</span><strong>$35,082</strong><div><span class=\"ds-positive\">QoQ +17.9%</span><span>YoY +93.6%</span></div></article>",
+      "css": ".ds-metric { width: 230px; min-height: 120px; display: flex; flex-direction: column; padding: 18px 16px 15px; border-right: 1px solid var(--rule, #cbd2d9); border-bottom: 1px solid var(--rule, #cbd2d9); border-radius: 0; background: var(--paper-bright, #fff); color: var(--ink, #111820); } .ds-metric-label { min-height: 28px; color: var(--muted, #5f6c78); font: 400 10px/1.2 Aptos, 'Segoe UI', sans-serif; text-transform: uppercase; letter-spacing: .045em; } .ds-metric strong { font: 720 27px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: -.04em; } .ds-metric div { display: flex; gap: 10px; margin-top: auto; color: var(--muted, #5f6c78); font: 400 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; } .ds-metric .ds-positive { color: var(--teal, #147d6f); font-weight: 750; }"
+    },
+    {
+      "name": "Ranked Change Record",
+      "kind": "custom",
+      "refersTo": "card-ledger",
+      "description": "The signature claim row linking rank, materiality, summary, metrics, and evidence action.",
+      "html": "<button class=\"ds-change\"><span class=\"ds-rank\">01</span><span class=\"ds-claim\"><span class=\"ds-meta\"><b>HIGH IMPORTANCE</b><i>SUPPORTED</i><em>SCORE 92</em></span><strong>Revenue growth accelerated sequentially</strong><small>Data center demand drove the largest material change this period.</small><span class=\"ds-tags\"><i>Revenue +17.9%</i><i>Data center +25.7%</i></span></span><span class=\"ds-view\">VIEW EVIDENCE →</span></button>",
+      "css": ".ds-change { position: relative; width: 680px; display: grid; grid-template-columns: 42px minmax(0,1fr) 112px; gap: 14px; align-items: start; padding: 21px 26px; border: 0; border-bottom: 1px solid var(--rule, #cbd2d9); border-radius: 0; background: #f7f9ff; color: var(--ink, #111820); text-align: left; cursor: pointer; box-shadow: inset 3px 0 0 var(--cobalt, #1649d8); } .ds-change:hover { background: #f0f3f6; } .ds-change:focus-visible { outline: 3px solid color-mix(in srgb, var(--focus, #006de5) 40%, transparent); outline-offset: -3px; } .ds-rank { color: var(--cobalt, #1649d8); font: 800 15px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; } .ds-claim { display: flex; flex-direction: column; } .ds-meta { min-height: 20px; display: flex; gap: 8px; align-items: center; color: var(--muted, #5f6c78); font: 750 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .035em; } .ds-meta b { padding: 5px 7px; color: #4d4000; background: var(--signal, #f1d94b); } .ds-meta i { padding: 4px 7px; border: 1px solid #beaa32; font-style: normal; } .ds-meta em { font-style: normal; font-weight: 400; } .ds-claim > strong { margin-top: 10px; font: 700 18px/1.2 Barlow, Aptos, sans-serif; letter-spacing: -.018em; } .ds-claim > small { margin-top: 5px; color: #42505c; font: 400 13px/1.5 Aptos, 'Segoe UI', sans-serif; } .ds-tags { display: flex; gap: 6px; margin-top: 14px; } .ds-tags i { padding: 3px 7px; background: #edf0f2; color: var(--muted, #5f6c78); font: 400 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; font-style: normal; } .ds-view { align-self: start; color: var(--cobalt, #1649d8); font: 750 10px/1.2 Aptos, 'Segoe UI', sans-serif; letter-spacing: .035em; }"
+    },
+    {
+      "name": "Ask the Delta Field",
+      "kind": "input",
+      "refersTo": "input-command",
+      "description": "A white command strip embedded inside the graphite grounded-question surface.",
+      "html": "<form class=\"ds-ask\"><label for=\"ds-question\">ASK THE DELTA</label><div><input id=\"ds-question\" placeholder=\"Ask about this quarter...\"><button aria-label=\"Submit question\">→</button></div></form>",
+      "css": ".ds-ask { width: 520px; padding: 16px 18px; background: var(--ink, #111820); color: white; box-shadow: 0 10px 30px rgba(20,32,45,.13); } .ds-ask label { display: block; margin-bottom: 13px; font: 750 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .045em; } .ds-ask div { height: 50px; display: flex; background: white; } .ds-ask input { min-width: 0; flex: 1; padding: 0 15px; border: 0; outline: 0; border-radius: 0; background: transparent; color: var(--ink, #111820); caret-color: var(--cobalt, #1649d8); font: 400 15px/1.45 Aptos, 'Segoe UI', sans-serif; } .ds-ask div:focus-within { outline: 3px solid color-mix(in srgb, var(--focus, #006de5) 40%, transparent); outline-offset: 3px; } .ds-ask button { width: 50px; border: 0; border-radius: 0; background: var(--cobalt, #1649d8); color: white; font-size: 20px; cursor: pointer; } .ds-ask button:hover { background: var(--cobalt-dark, #0f3295); }"
+    },
+    {
+      "name": "Evidence Record",
+      "kind": "custom",
+      "description": "A numbered source record that keeps evidence kind and provenance visible.",
+      "html": "<article class=\"ds-evidence\"><span>E01</span><div><small>STRUCTURED FINANCIAL EVIDENCE</small><h3>Revenue calculation</h3><p>Current $35,082M − prior $29,760M = +17.9% quarter over quarter.</p></div></article>",
+      "css": ".ds-evidence { width: 390px; display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 20px 22px; border-bottom: 1px solid var(--rule-dark, #9ba6b1); border-radius: 0; background: #e8edf1; color: var(--ink, #111820); } .ds-evidence > span { color: var(--cobalt, #1649d8); font: 800 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; } .ds-evidence small { color: var(--muted, #5f6c78); font: 400 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .045em; } .ds-evidence h3 { margin: 7px 0 8px; font: 700 13px/1.2 Aptos, 'Segoe UI', sans-serif; } .ds-evidence p { margin: 0; color: #36434e; font: 400 12px/1.55 Aptos, 'Segoe UI', sans-serif; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Chain-of-Custody Ledger",
+    "overview": "Earnings Delta feels like a modern research record assembled for scrutiny. Cool paper, graphite ink, ruled divisions, squared controls, and dense tabular values make financial changes feel inspectable rather than decorative. Cobalt identifies actions and the active analytical path; signal yellow behaves like an evidence tab attached to the record.\n\nThe interface is compact, sober, and deliberately unlike a generic stock-dashboard grid. Information is sequenced as a chain: issuer, comparable period, metric delta, ranked observation, linked evidence, then grounded follow-up. Expressive moments come from strict contrast and editorial composition, not soft cards or ornamental data visualization.",
+    "keyCharacteristics": [
+      "Chain-of-custody information hierarchy from claim to source.",
+      "Cool paper and ruled white ledgers instead of floating dashboard cards.",
+      "Cobalt actions and signal-yellow evidence markers used with restraint.",
+      "Squared controls, tight labels, and monospaced financial values.",
+      "Dense desktop comparison that collapses into a legible mobile record."
+    ],
+    "rules": [
+      { "name": "The Evidence Ink Rule", "body": "Yellow marks evidence, importance, or system status; it is never a general-purpose decorative accent.", "section": "colors" },
+      { "name": "The One Action Color Rule", "body": "Cobalt alone carries interactivity and active selection. Semantic teal, rust, and violet classify data rather than invite clicks.", "section": "colors" },
+      { "name": "The Audit Trail Rule", "body": "Anything a reviewer may compare—amounts, ranks, dates, periods, scores, IDs, or classifications—uses the monospaced voice.", "section": "typography" },
+      { "name": "The Compression Rule", "body": "Small type is reserved for concise metadata; explanatory copy never adopts the label treatment.", "section": "typography" },
+      { "name": "The First-Viewport Rule", "body": "On a research route, the command header, issuer record, six-value snapshot, ranked delta, evidence workspace, and question entry should read as one continuous workflow—not separate dashboard modules.", "section": "layout" },
+      { "name": "The Flat Record Rule", "body": "Ledger cells and evidence items remain shadowless; borders and surface tones establish their hierarchy.", "section": "elevation" },
+      { "name": "The Squared Control Rule", "body": "Do not soften operational controls with generic medium or pill radii; squared silhouettes are part of the product’s research-terminal identity.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do sequence every material claim toward its calculation, classification, and source.",
+      "Do use rules, aligned values, and surface tone to organize dense information.",
+      "Do reserve cobalt for action and active state, and signal yellow for evidence or status.",
+      "Do keep comparison values, labels, ranks, and evidence IDs monospaced.",
+      "Do preserve the full evidence workflow when adapting the layout to smaller screens."
+    ],
+    "donts": [
+      "Don't turn the product into a mosaic of floating KPI cards or interchangeable stock-dashboard widgets.",
+      "Don't add soft rounded cards, pill controls, gradients, glass effects, or ornamental charts.",
+      "Don't use semantic teal, rust, or violet as action colors.",
+      "Don't rely on color alone for direction, importance, confidence, or evidence type.",
+      "Don't let decorative whitespace break the continuous chain from issuer to evidence."
+    ]
+  }
+}
