@@ -2,61 +2,64 @@
 
 **See what changed, understand why, and verify the evidence.**
 
-> Product screenshot placeholder — add the deployed research workspace screenshot here.
+[Open the live demo](https://earnings-delta.vercel.app/)
 
 ## Problem
 
-Company filings and earnings calls contain the answer to what changed, but connecting the important figures to the explanation is slow. Most market dashboards show values; they do not rank material changes or expose the evidence behind a conclusion.
+Financial filings and earnings calls contain the explanation behind company performance, but connecting the numbers to material changes and their causes takes time. Most financial dashboards display values. Earnings Delta focuses on identifying what materially changed and exposing the evidence behind each conclusion.
 
 ## Solution
 
-Earnings Delta compares reporting periods, calculates financial deltas deterministically, ranks material observations, and lets an investor trace every conclusion to structured numbers or stored management commentary.
+Earnings Delta compares reporting periods, calculates financial changes deterministically, ranks material observations, and connects conclusions to structured evidence and representative management commentary. Ask the Delta supports grounded follow-up research using only the active company context.
 
-## Core features
+## Core Features
 
-- Multi-period research for NVDA, AAPL, and MSFT using representative demo data
-- Previous-quarter and prior-year comparisons
+- Research demos for NVDA, AAPL, and MSFT
+- Quarter-over-quarter and year-over-year comparisons
 - Financial snapshot with context-aware movement labels
-- Ranked “What changed” ledger with explicit confidence classes
-- Evidence drawer for calculations, filings, transcripts, and interpretation
-- Grounded “Ask the Delta” research input with a useful no-key fallback
+- Deterministic material change detection and ranking
+- `Verified`, `Supported`, and `AI Interpretation` confidence states
+- Evidence drawer linking calculations and commentary to each insight
+- Ask the Delta with a deterministic no-key fallback
 
 ## Architecture
 
-The project is a single Next.js App Router application. Route Handlers and server-side finance modules perform validation and analysis. A small `FinancialDataProvider` contract isolates the typed demo dataset and leaves a clean seam for a future verified Fiscal.ai integration. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+Earnings Delta is one Next.js App Router application deployed through Vercel. Strict TypeScript, server-side finance modules, and Zod validation keep calculations and API boundaries explicit. A `FinancialDataProvider` abstraction isolates the current mock provider and provides a clean path to a verified Fiscal.ai provider. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
-## Tech stack
+## Tech Stack
 
-Next.js, React, strict TypeScript, Tailwind CSS, Zod, and Vitest. It deploys as one Vercel project with no database or paid service.
+Next.js, React, TypeScript, Tailwind CSS, Zod, Vitest, and Vercel.
 
-## How material change detection works
+## Material Change Detection
 
-The engine normalizes each period, computes absolute, percentage, percentage-point, growth-acceleration, cash-flow-divergence, and segment-contribution deltas, then scores observations from 0–100 using magnitude (60 points), relevance (25), and corroborating evidence (15). This keeps the ranking deterministic and explainable; AI is not asked to discover the numbers.
+Calculations happen before any AI interpretation. The engine normalizes reporting periods, computes absolute, percentage, percentage-point, cash-flow-divergence, and segment-contribution changes, then ranks observations with an explainable 0 to 100 materiality score:
 
-## How evidence grounding works
+- Magnitude: up to 60 points
+- Company relevance: up to 25 points
+- Corroborating evidence: 15 points
 
-Numerical claims come only from typed financial data. Quotes come only from stored demo filing or transcript excerpts. Evidence IDs are attached while insights are created and are revalidated before display. Claims are labeled `Verified`, `Supported`, or `AI interpretation`; insufficient evidence produces an explicit limitation.
+## Evidence Grounding
 
-## Data source strategy
+Numerical claims originate from structured financial data, and evidence references are attached while insights are created. Confidence states distinguish directly calculated facts (`Verified`), claims supported by stored commentary (`Supported`), and reasonable but unproven inferences (`AI Interpretation`). Insufficient evidence produces an explicit limitation.
 
-The public build uses clearly labeled representative data so the complete workflow works without secrets or paid APIs. A provider interface covers company metadata, periods, statements, KPIs, segments, filings, transcripts, and prices. A real Fiscal.ai adapter is intentionally deferred until official access and response documentation are available.
+The public demo uses representative filing commentary, representative transcript commentary, and demo evidence snippets to demonstrate the evidence workflow. They are not presented as verbatim excerpts from company source documents.
 
-## Local development
+## Data Source Strategy
+
+The public demo uses representative financial data so the complete workflow runs without paid APIs or secrets. The provider architecture is designed so a verified Fiscal.ai integration can replace the mock provider without changing the analysis or interface layers.
+
+## Local Development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The demo works with no environment variables.
+Open [http://localhost:3000](http://localhost:3000). No environment variables are required for the default demo. `.env.example` documents the optional key reserved for a future LLM provider.
 
-## Environment variables
+## Deployment
 
-Copy `.env.example` to `.env.local` only if adding an optional LLM provider. No variable is required for the default application.
-
-## Deploy to Vercel
-
-Import the GitHub repository into Vercel, keep the detected Next.js settings, and deploy. No build override, database, or persistent filesystem is required.
+The production application is deployed at [earnings-delta.vercel.app](https://earnings-delta.vercel.app/). A fork can be deployed by importing the repository into Vercel with the default Next.js settings. No database or persistent filesystem is required.
 
 ## Testing
 
@@ -67,18 +70,20 @@ npm run lint
 npm run build
 ```
 
-## Known limitations
+## Known Limitations
 
-- Financial values and excerpts are representative demo content, not live or audited data.
-- The public build does not include a live Fiscal.ai adapter.
-- No-key Q&A answers the supported research intents deterministically rather than acting as an open-ended chatbot.
+- Representative demo data rather than live financial data
+- No live Fiscal.ai adapter
+- Deterministic research fallback when an LLM provider is unavailable
 
-## Future improvements
+## Future Improvements
 
-- Add a documented Fiscal.ai provider when official access is available.
-- Add a schema-validated LLM provider for more flexible grounded questions.
-- Expand issuer-specific KPI and segment models while preserving deterministic calculations.
+- Add a verified Fiscal.ai provider
+- Add a schema-validated, grounded LLM provider
+- Expand company coverage and issuer-specific KPIs
 
-### Why I Built This
+## Why I Built This
 
-I wanted to explore how financial data, earnings reports, transcripts, and AI could be combined into a workflow that helps investors understand not only the numbers themselves, but what materially changed between reporting periods and why.
+I built Earnings Delta after interviewing for a Full Stack Developer role at Fiscal.ai. The conversation made me think more deeply about how structured financial data, earnings reports, transcripts, and AI could work together in an evidence-first research workflow. I wanted to explore that idea by building it rather than only discussing it.
+
+The goal was to understand how financial data could become a workflow that helps investors identify what materially changed between reporting periods, understand why it matters, and verify the evidence behind the conclusion.

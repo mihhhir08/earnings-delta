@@ -8,7 +8,7 @@ Earnings Delta is one Next.js App Router application. Server components load com
 Browser
   ├─ /                         Landing page
   └─ /research/[ticker]        Research workspace
-       └─ /api/research/[ticker]  Validated company analysis + grounded Q&A
+       └─ /api/ask                Validated grounded Q&A
                 ↓
         FinancialDataProvider
                 ↓

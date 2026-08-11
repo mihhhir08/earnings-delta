@@ -42,8 +42,6 @@ svg { width: 1.15em; fill: none; stroke: currentColor; stroke-width: 1.65; strok
 
 :focus-visible { outline: 3px solid color-mix(in srgb, var(--focus) 40%, transparent); outline-offset: 3px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-.direction-contract { display: none; }
-
 .wordmark { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 750; letter-spacing: -.02em; }
 .hero-copy h1, .landing-principle h2, .issuer-identity h1, .change-content h3, .evidence-header h2, .state-page h1 { font-family: var(--font-display), Aptos, sans-serif; }
 .delta-mark { display: grid; place-items: center; width: 27px; height: 27px; color: white; background: var(--cobalt); font-size: 16px; font-weight: 800; }
