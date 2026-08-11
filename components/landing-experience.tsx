@@ -58,8 +58,6 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
           </nav>
         </header>
 
-        <div className="hero-coordinate" aria-hidden="true"><span>43.6532° N</span><i /><span>79.3832° W</span></div>
-
         <div className="hero-composition">
           <div className="hero-copy">
             <h1>See what changed. <span>Verify why.</span></h1>
@@ -104,7 +102,6 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
           </div>
         </div>
 
-        <a className="scroll-cue" href="#proof"><span>See what it proves</span><i /></a>
       </section>
 
       <section className="proof-section" id="proof">
