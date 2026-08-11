@@ -146,7 +146,7 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
       <footer className="landing-footer">
         <span>Earnings Delta</span>
         <span>Evidence-first financial research</span>
-        <a href="https://portfolio-khaki-sigma-74.vercel.app">Built by Mihirsinh Chavda <ExternalIcon /></a>
+        <a href="https://mihirsinhchavda.com/">Built by Mihirsinh Chavda <ExternalIcon /></a>
       </footer>
     </main>
   );
