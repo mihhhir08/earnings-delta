@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { answerGroundedQuestion } from "../lib/ai/answer";
 import { companyData } from "../lib/data/companies";
 import { analyzeCompany, calculateChange, materialityScore, segmentContribution } from "../lib/finance/analysis";
 
@@ -74,5 +75,33 @@ describe("representative research demo", () => {
         }
       }
     }
+  });
+
+  it("answers typed metric questions from the active comparison", () => {
+    const company = companyData.find(({ ticker }) => ticker === "NVDA")!;
+    const answer = answerGroundedQuestion(company, "qoq", "How did EPS change?");
+
+    expect(answer.answer).toContain("$0.89");
+    expect(answer.answer).toContain("$0.78");
+    expect(answer.answer).toContain("14.1% higher");
+    expect(answer.evidence).toHaveLength(1);
+    expect(answer.limited).toBe(false);
+  });
+
+  it("returns an explicit scope limit for unsupported questions", () => {
+    const company = companyData.find(({ ticker }) => ticker === "NVDA")!;
+    const answer = answerGroundedQuestion(company, "qoq", "What will the stock price be next year?");
+
+    expect(answer.limited).toBe(true);
+    expect(answer.evidence).toHaveLength(0);
+    expect(answer.answer).toContain("cannot support");
+  });
+
+  it("does not invent a cause when commentary does not establish one", () => {
+    const company = companyData.find(({ ticker }) => ticker === "MSFT")!;
+    const answer = answerGroundedQuestion(company, "qoq", "Why did gross margin move?");
+
+    expect(answer.limited).toBe(true);
+    expect(answer.answer).toContain("does not establish a separate cause");
   });
 });

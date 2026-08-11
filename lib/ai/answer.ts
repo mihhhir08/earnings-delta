@@ -1,6 +1,15 @@
-import { analyzeCompany, formatFinancialValue } from "@/lib/finance/analysis";
+import { analyzeCompany, formatFinancialValue } from "../finance/analysis";
 import type { AskDeltaResponse } from "@/lib/schemas";
-import type { CompanyData, ComparisonMode } from "@/lib/types";
+import type { CompanyData, ComparisonMode, MetricKey } from "@/lib/types";
+
+const metricQuestions: { key: MetricKey; label: string; terms: string[] }[] = [
+  { key: "grossMargin", label: "Gross margin", terms: ["gross margin", "margin"] },
+  { key: "operatingIncome", label: "Operating income", terms: ["operating income", "operating profit"] },
+  { key: "netIncome", label: "Net income", terms: ["net income", "net profit", "income"] },
+  { key: "eps", label: "Diluted EPS", terms: ["eps", "earnings per share"] },
+  { key: "freeCashFlow", label: "Free cash flow", terms: ["free cash flow", "cash flow", "fcf"] },
+  { key: "revenue", label: "Revenue", terms: ["revenue", "sales"] },
+];
 
 export function answerGroundedQuestion(company: CompanyData, mode: ComparisonMode, question: string): AskDeltaResponse {
   const analysis = analyzeCompany(company, mode);
@@ -9,39 +18,47 @@ export function answerGroundedQuestion(company: CompanyData, mode: ComparisonMod
   }
 
   const normalized = question.toLowerCase();
+  const asksWhy = /\b(why|cause|caused)\b/.test(normalized);
   const findMetric = (label: string) => analysis.snapshot.find((metric) => metric.label === label);
   const selectInsight = (id: string) => analysis.insights.find((insight) => insight.id === id);
-  const insight = normalized.includes("margin") ? selectInsight("margin-change")
-    : normalized.includes("segment") || normalized.includes("drove") || normalized.includes("driver") ? selectInsight("segment-driver")
-    : normalized.includes("cash") ? selectInsight("cash-flow-divergence")
-    : normalized.includes("revenue") || normalized.includes("growth") ? selectInsight("revenue-change")
-    : normalized.includes("operating") ? selectInsight("operating-leverage")
+  const metricQuestion = metricQuestions.find(({ terms }) => terms.some((term) => normalized.includes(term)));
+  const insight = normalized.includes("segment") || normalized.includes("driver") || normalized.includes("drove") ? selectInsight("segment-driver")
+    : normalized.includes("cash conversion") ? selectInsight("cash-flow-divergence")
+    : normalized.includes("operating leverage") ? selectInsight("operating-leverage")
+    : metricQuestion?.key === "grossMargin" ? selectInsight("margin-change")
+    : metricQuestion?.key === "revenue" || normalized.includes("growth") ? selectInsight("revenue-change")
     : undefined;
 
   if (insight) {
+    const causeLimited = asksWhy && !insight.evidence.some(({ kind }) => kind === "commentary");
     return {
-      answer: insight.summary,
+      answer: `${insight.summary}${causeLimited ? " The available record verifies the change but does not establish a separate cause." : ""}`,
       confidence: insight.confidence,
       evidence: insight.evidence.slice(0, 3).map(({ label, detail }) => ({ label, detail })),
-      limited: insight.confidence === "AI Interpretation",
+      limited: insight.confidence === "AI Interpretation" || causeLimited,
     };
   }
 
-  if (normalized.includes("free cash flow") || normalized.includes("fcf")) {
-    const metric = findMetric("Free cash flow");
+  if (metricQuestion) {
+    const metric = findMetric(metricQuestion.label);
     const change = mode === "qoq" ? metric?.qoq : metric?.yoy;
     if (metric && change) {
+      const margin = metricQuestion.key === "grossMargin";
+      const movement = margin ? change.percentagePoints : change.percent;
+      const movementText = movement === null
+        ? "with no meaningful percentage comparison"
+        : `${Math.abs(movement).toFixed(1)}${margin ? " percentage points" : "%"} ${movement >= 0 ? "higher" : "lower"}`;
       return {
-        answer: `Free cash flow was ${formatFinancialValue("freeCashFlow", metric.current)}, a ${change.percent === null ? "not meaningful" : `${Math.abs(change.percent).toFixed(1)}% ${change.percent >= 0 ? "increase" : "decrease"}`} versus ${analysis.comparisonPeriod.label}.`,
+        answer: `${metricQuestion.label} was ${formatFinancialValue(metricQuestion.key, metric.current)} in ${analysis.currentPeriod.label}, ${movementText} than ${formatFinancialValue(metricQuestion.key, change.comparison)} in ${analysis.comparisonPeriod.label}.${asksWhy ? " The available record verifies the change but does not establish a separate cause." : ""}`,
         confidence: "Verified",
-        evidence: [{ label: "Structured financials", detail: `${formatFinancialValue("freeCashFlow", change.current)} versus ${formatFinancialValue("freeCashFlow", change.comparison)}.` }],
-        limited: false,
+        evidence: [{ label: `${metricQuestion.label} calculation`, detail: `${formatFinancialValue(metricQuestion.key, change.current)} versus ${formatFinancialValue(metricQuestion.key, change.comparison)}; ${movementText}.` }],
+        limited: asksWhy,
       };
     }
   }
 
   return {
-    answer: "The available company context does not support a reliable answer to that question. Try asking about revenue, gross margin, segments, operating leverage, or free cash flow.",
+    answer: "This MVP record cannot support that question reliably. Try revenue, gross margin, operating income, net income, EPS, segments, operating leverage, or free cash flow.",
     confidence: "Verified",
     evidence: [],
     limited: true,
