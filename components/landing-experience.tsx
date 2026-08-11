@@ -115,8 +115,9 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
 
       <section className="project-story" id="why">
         <div>
-          <h2>An interview became a working product.</h2>
-          <p>After an email exchange and recorded video interview for Fiscal.ai&apos;s Full Stack Developer role, I built the idea I wanted to put in front of the team: an evidence-first workflow for understanding what changed in a quarter and why.</p>
+          <h2>Built from a question worth exploring.</h2>
+          <p>After interviewing for a Full Stack Developer role at Fiscal.ai, I kept thinking about one problem: how can structured financial data, earnings reports, transcripts, and AI work together without losing trust or traceability?</p>
+          <p>Earnings Delta is my attempt to answer that by building the workflow itself. It helps investors move from a reported number to understanding what changed, why it matters, and what evidence supports the conclusion.</p>
         </div>
         <div className="project-outcome">
           <strong>Working full-stack MVP.</strong>

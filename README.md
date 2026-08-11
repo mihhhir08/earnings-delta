@@ -86,6 +86,8 @@ npm run build
 
 ## Why I Built This
 
-I built Earnings Delta after an email exchange about a Full Stack Developer role at Fiscal.ai and a recorded video interview rather than a live conversation. The process made me think more deeply about how structured financial data, earnings reports, transcripts, and AI could work together in an evidence-first research workflow. I wanted to explore that idea by building it.
+**Built from a question worth exploring.**
 
-The goal was to understand how financial data could become a workflow that helps investors identify what materially changed between reporting periods, understand why it matters, and verify the evidence behind the conclusion.
+After interviewing for a Full Stack Developer role at Fiscal.ai, I kept thinking about one problem: how can structured financial data, earnings reports, transcripts, and AI work together without losing trust or traceability?
+
+Earnings Delta is my attempt to answer that by building the workflow itself. It helps investors move from a reported number to understanding what changed, why it matters, and what evidence supports the conclusion.
