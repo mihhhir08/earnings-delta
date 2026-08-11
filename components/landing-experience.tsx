@@ -57,9 +57,8 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
     <main className="landing-shell">
       <section className="spectral-hero" id="product">
         <div className="hero-beams" aria-hidden="true">
-          <Beams beamWidth={1.8} beamHeight={22} beamNumber={15} lightColor="#7fffd4" speed={1.25} noiseIntensity={1.35} scale={0.16} rotation={-17} />
+          <Beams beamWidth={3} beamHeight={30} beamNumber={20} lightColor="#ffffff" speed={2} noiseIntensity={1.75} scale={0.2} rotation={30} />
         </div>
-        <div className="hero-shade" aria-hidden="true" />
 
         <header className="landing-header">
           <nav className="landing-nav" aria-label="Primary navigation">

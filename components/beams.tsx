@@ -222,7 +222,7 @@ const DirectionalLight: FC<{ position: [number, number, number]; color: string }
 };
 
 const CanvasWrapper: FC<{ children: ReactNode; reducedMotion: boolean }> = ({ children, reducedMotion }) => (
-  <Canvas dpr={[1, 1.5]} frameloop={reducedMotion ? "demand" : "always"} style={{ width: "100%", height: "100%", position: "relative" }}>
+  <Canvas dpr={[1, 2]} frameloop={reducedMotion ? "demand" : "always"} style={{ width: "100%", height: "100%", position: "relative" }}>
     {children}
   </Canvas>
 );
@@ -290,7 +290,7 @@ gl_FragColor.rgb -= randomNoise / 15. * uNoiseIntensity;`,
       diffuse: new THREE.Color("#000000"),
       time: 0,
       roughness: 0.3,
-      metalness: 0.35,
+      metalness: 0.3,
       uSpeed: speed,
       envMapIntensity: 10,
       uNoiseIntensity: noiseIntensity,
@@ -306,7 +306,7 @@ gl_FragColor.rgb -= randomNoise / 15. * uNoiseIntensity;`,
         <DirectionalLight color={lightColor} position={[0, 3, 10]} />
       </group>
       <ambientLight intensity={1} />
-      <color attach="background" args={["#020407"]} />
+      <color attach="background" args={["#000000"]} />
       <PerspectiveCamera makeDefault position={[0, 0, 20]} fov={30} />
     </CanvasWrapper>
   );
