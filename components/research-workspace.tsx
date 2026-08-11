@@ -76,7 +76,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
         </div>
         <details className="dataset-disclosure">
           <summary><span className="status-dot" /> Representative dataset</summary>
-          <p>Representative financials and commentary demonstrate the full research workflow. Commentary is labeled and is not presented as a verbatim company source.</p>
+          <p>Calculations update from the selected company and comparison period. Commentary is representative, labeled, and not presented as a verbatim company source.</p>
         </details>
       </header>
 
@@ -89,8 +89,8 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
         <div className="period-control">
           <span>Compare {analysis.currentPeriod.label}</span>
           <div role="group" aria-label="Comparison period">
-            <button className={mode === "qoq" ? "active" : ""} onClick={() => changeMode("qoq")}>Previous quarter</button>
-            <button className={mode === "yoy" ? "active" : ""} onClick={() => changeMode("yoy")}>Prior year</button>
+            <button className={mode === "qoq" ? "active" : ""} onClick={() => changeMode("qoq")} aria-pressed={mode === "qoq"}><span>Previous quarter</span><small>{analyses.qoq.comparisonPeriod.label}</small></button>
+            <button className={mode === "yoy" ? "active" : ""} onClick={() => changeMode("yoy")} aria-pressed={mode === "yoy"}><span>Prior year</span><small>{analyses.yoy.comparisonPeriod.label}</small></button>
           </div>
         </div>
       </section>
@@ -116,11 +116,11 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
       <div className="research-main">
         <section className="changes-pane" aria-labelledby="changes-title">
           <div className="section-heading changes-heading">
-            <div><h2 id="changes-title">What changed</h2><p>Ordered by materiality and evidence strength.</p></div>
+            <div><h2 id="changes-title">What changed</h2><p aria-live="polite">{analysis.currentPeriod.label} versus {analysis.comparisonPeriod.label}; recalculated from structured values.</p></div>
             <span>{analysis.insights.length} material observations</span>
           </div>
           <div className="change-list change-list-primary">{analysis.insights.slice(0, 1).map(renderInsight)}</div>
-          <AskDelta key={`${analysis.company.ticker}-${mode}`} ticker={analysis.company.ticker} mode={mode} />
+          <AskDelta key={`${analysis.company.ticker}-${mode}`} ticker={analysis.company.ticker} mode={mode} currentPeriod={analysis.currentPeriod.label} comparisonPeriod={analysis.comparisonPeriod.label} />
           <div className="change-list change-list-rest">{analysis.insights.slice(1).map((insight, index) => renderInsight(insight, index + 1))}</div>
         </section>
         <EvidencePanel insight={selected} open={evidenceOpen} onClose={() => setEvidenceOpen(false)} />

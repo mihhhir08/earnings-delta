@@ -10,7 +10,7 @@ function SendIcon() {
   return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m3 4 14 6-14 6 2-6-2-6Zm2 6h12" /></svg>;
 }
 
-export function AskDelta({ ticker, mode }: { ticker: string; mode: ComparisonMode }) {
+export function AskDelta({ ticker, mode, currentPeriod, comparisonPeriod }: { ticker: string; mode: ComparisonMode; currentPeriod: string; comparisonPeriod: string }) {
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState<AskDeltaResponse | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
@@ -36,7 +36,7 @@ export function AskDelta({ ticker, mode }: { ticker: string; mode: ComparisonMod
     <section className="ask-delta" aria-labelledby="ask-heading">
       <div className="ask-title">
         <div><span className="ask-mark">Δ?</span><div><h2 id="ask-heading">Ask about this quarter</h2><p>Answers stay grounded in the current company record.</p></div></div>
-        <span className="grounding-state">Evidence linked</span>
+        <span className="grounding-state">{ticker} · {currentPeriod} vs {comparisonPeriod}</span>
       </div>
       <form onSubmit={submit}>
         <label className="sr-only" htmlFor="delta-question">Ask about this quarter</label>

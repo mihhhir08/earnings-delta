@@ -97,6 +97,12 @@ function sourceEvidence(period: FinancialPeriod, index = 0): EvidenceItem {
   };
 }
 
+function matchingSourceEvidence(period: FinancialPeriod, subject: string): EvidenceItem | null {
+  const normalized = subject.toLowerCase();
+  const index = period.sources.findIndex((source) => source.excerpt.toLowerCase().includes(normalized));
+  return index === -1 ? null : sourceEvidence(period, index);
+}
+
 function makeInsight(input: Omit<Insight, "importance">): Insight {
   return { ...input, importance: importance(input.score) };
 }
@@ -126,21 +132,26 @@ export function generateInsights(company: CompanyData, current: FinancialPeriod,
   const revenueDelta = revenue.absolute ?? 0;
   const segmentDeltas = Object.entries(current.segments)
     .map(([name, value]) => ({ name, value, prior: comparison.segments[name] ?? 0, delta: value - (comparison.segments[name] ?? 0) }))
+    .filter(({ delta }) => revenueDelta === 0 || Math.sign(delta) === Math.sign(revenueDelta))
     .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
   const lead = segmentDeltas[0];
   if (lead) {
     const contribution = segmentContribution(lead.value, lead.prior, revenueDelta);
+    const source = matchingSourceEvidence(current, lead.name);
+    const offset = contribution !== null && contribution > 100
+      ? ` Other segments offset ${formatFinancialValue("revenue", Math.abs(lead.delta) - Math.abs(revenueDelta))} of that movement.`
+      : "";
     const score = materialityScore(Math.abs(contribution ?? 0) / 4, 25, true);
     insights.push(makeInsight({
       id: "segment-driver",
       title: `${lead.name} drove the change`,
-      summary: `${lead.name} changed by ${formatFinancialValue("revenue", lead.delta)} and represented ${contribution === null ? "an unmeasurable share" : `${Math.abs(contribution).toFixed(0)}%`} of the net revenue movement.`,
+      summary: `${lead.name} changed by ${formatFinancialValue("revenue", lead.delta)} and represented ${contribution === null ? "an unmeasurable share" : `${Math.abs(contribution).toFixed(0)}%`} of the net revenue movement.${offset}`,
       score,
-      confidence: "Supported",
+      confidence: source ? "Supported" : "Verified",
       supportingMetrics: [`${lead.name} revenue`, "Total revenue", "Segment contribution"],
       evidence: [
-        { id: "segment-calculation", kind: "structured", label: "Segment contribution", detail: `${lead.name}: ${formatFinancialValue("revenue", lead.value)} versus ${formatFinancialValue("revenue", lead.prior)}; company revenue delta ${formatFinancialValue("revenue", revenueDelta)}.` },
-        sourceEvidence(current, 1),
+        { id: "segment-calculation", kind: "structured", label: "Segment contribution", detail: `${formatFinancialValue("revenue", lead.value)} − ${formatFinancialValue("revenue", lead.prior)} = ${formatFinancialValue("revenue", lead.delta)}; divided by the ${formatFinancialValue("revenue", revenueDelta)} company revenue change = ${contribution === null ? "not meaningful" : `${Math.abs(contribution).toFixed(0)}%`}.` },
+        ...(source ? [source] : []),
       ],
     }));
   }

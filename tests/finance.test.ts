@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { calculateChange, materialityScore, segmentContribution } from "../lib/finance/analysis";
+import { companyData } from "../lib/data/companies";
+import { analyzeCompany, calculateChange, materialityScore, segmentContribution } from "../lib/finance/analysis";
 
 describe("financial change calculations", () => {
   it("calculates absolute and percentage change", () => {
@@ -32,5 +33,43 @@ describe("materiality", () => {
   it("calculates segment contribution", () => {
     expect(segmentContribution(150, 100, 100)).toBe(50);
     expect(segmentContribution(150, 100, 0)).toBeNull();
+  });
+});
+
+describe("representative research demo", () => {
+  it.each(companyData)("keeps $ticker financial statements internally consistent", (company) => {
+    for (const period of company.periods) {
+      const { revenue, grossProfit, grossMargin, operatingCashFlow, capitalExpenditures, freeCashFlow } = period.metrics;
+      expect(revenue).not.toBeNull();
+      expect(grossProfit).not.toBeNull();
+      expect(Math.abs(grossMargin! - (grossProfit! / revenue!) * 100)).toBeLessThan(0.15);
+      expect(freeCashFlow).toBe(operatingCashFlow! - capitalExpenditures!);
+      expect(Math.abs(Object.values(period.segments).reduce((sum, value) => sum + value, 0) - revenue!) / revenue!).toBeLessThan(0.01);
+    }
+  });
+
+  it("recalculates NVDA findings for the selected comparison", () => {
+    const company = companyData.find(({ ticker }) => ticker === "NVDA")!;
+    const qoq = analyzeCompany(company, "qoq")!;
+    const yoy = analyzeCompany(company, "yoy")!;
+
+    expect(qoq.comparisonPeriod.label).toBe("FY 2025 Q3");
+    expect(yoy.comparisonPeriod.label).toBe("FY 2024 Q4");
+    expect(qoq.snapshot.find(({ key }) => key === "revenue")?.qoq.percent).toBeCloseTo(12.1, 1);
+    expect(yoy.snapshot.find(({ key }) => key === "revenue")?.yoy.percent).toBeCloseTo(78, 0);
+    expect(qoq.insights.find(({ id }) => id === "segment-driver")?.summary).toContain("offset");
+    expect(qoq.insights.map(({ summary }) => summary)).not.toEqual(yoy.insights.map(({ summary }) => summary));
+  });
+
+  it("only labels a finding Supported when commentary names its subject", () => {
+    for (const company of companyData) {
+      for (const mode of ["qoq", "yoy"] as const) {
+        for (const insight of analyzeCompany(company, mode)!.insights) {
+          if (insight.confidence === "Supported") {
+            expect(insight.evidence.some(({ kind }) => kind === "commentary")).toBe(true);
+          }
+        }
+      }
+    }
   });
 });
