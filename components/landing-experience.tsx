@@ -8,6 +8,11 @@ const Beams = dynamic(() => import("@/components/beams"), { ssr: false });
 
 type Direction = "favorable" | "unfavorable" | "neutral";
 
+const HERO_LINES = [
+  ["See", "what", "changed."],
+  ["Verify", "why."],
+] as const;
+
 export interface LandingPreview {
   ticker: string;
   period: string;
@@ -60,18 +65,31 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
 
         <div className="hero-composition">
           <div className="hero-copy">
-            <h1>See what changed. <span>Verify why.</span></h1>
-            <p>Earnings Delta turns quarterly results into ranked, evidence-linked insights without losing the source trail.</p>
+            <h1 aria-label="See what changed. Verify why.">
+              {HERO_LINES.map((line, lineIndex) => (
+                <span className="hero-line" aria-hidden="true" key={line.join("-")}>
+                  {line.map((word, wordIndex) => (
+                    <span
+                      className="hero-word"
+                      key={word}
+                      style={{ animationDelay: `${(lineIndex * 3 + wordIndex) * 90}ms` }}
+                    >
+                      {word}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </h1>
+            <p>Earnings Delta turns quarterly results into ranked explanations you can trace back to the source.</p>
             <div className="hero-actions">
               <Link className="primary-action" href={active.href}>Open live workspace <ArrowIcon /></Link>
               <a className="secondary-action" href="https://github.com/mihhhir08/earnings-delta">View source <ExternalIcon /></a>
             </div>
-            <div className="hero-status"><span className="status-dot" />Working MVP <i /> Three companies <i /> Five periods</div>
           </div>
 
           <div className="analysis-prism" role="region" aria-label="Interactive product preview">
             <div className="prism-header">
-              <span>Live product preview</span>
+              <span>Interactive preview</span>
               <div className="preview-company-tabs" role="group" aria-label="Preview company">
                 {previews.map((preview) => (
                   <button key={preview.ticker} className={active.ticker === preview.ticker ? "active" : ""} onClick={() => setTicker(preview.ticker)} aria-pressed={active.ticker === preview.ticker}>
@@ -79,12 +97,11 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
                   </button>
                 ))}
               </div>
-              <span className="prism-state"><i />Evidence linked</span>
             </div>
 
             <div className="prism-body" key={active.ticker}>
               <div className="prism-result">
-                <div><span>{active.period} · {active.comparison}</span><b>{active.insight.confidence}</b></div>
+                <div><span>{active.period} · {active.comparison}</span><b>Source support: {active.insight.confidence}</b></div>
                 <h2>{active.insight.title}</h2>
                 <p>{active.insight.summary}</p>
                 <div className="confidence-track"><span style={{ width: `${active.insight.score}%` }} /><small>Materiality {active.insight.score}</small></div>
