@@ -67,7 +67,7 @@ export function EvidencePanel({ insight, open, onClose }: { insight: Insight | n
             </div>
             <button className="icon-button" onClick={onClose} aria-label="Close evidence"><CloseIcon /></button>
           </header>
-          <div className="evidence-route" aria-label="Evidence structure"><span>Claim</span><i /><span>Calculation</span><i /><span>Source</span><i /><span>Confidence</span></div>
+          <div className="evidence-route" aria-label="Evidence structure"><span>Claim</span><i /><span>Calculation</span><i /><span>Commentary</span><i /><span>Confidence</span></div>
           <div className="evidence-summary">
             <span className={`confidence confidence-${insight.confidence.toLowerCase().replace(" ", "-")}`}>{insight.confidence}</span>
             <p>{insight.summary}</p>
@@ -80,7 +80,7 @@ export function EvidencePanel({ insight, open, onClose }: { insight: Insight | n
                   <span className="evidence-kind">{item.kind === "structured" ? "Calculation" : item.kind === "commentary" ? "Representative commentary" : "Interpretation boundary"}</span>
                   <h3>{item.label}</h3>
                   <p>{item.detail}</p>
-                  {item.source && <small>{item.source.title}{item.source.speaker ? ` · ${item.source.speaker}` : ""}</small>}
+                  {item.commentary && <small>{item.commentary.title}{item.commentary.speaker ? ` · ${item.commentary.speaker}` : ""}</small>}
                 </div>
               </article>
             ))}
@@ -94,7 +94,7 @@ export function EvidencePanel({ insight, open, onClose }: { insight: Insight | n
         <div className="evidence-empty">
           <span className="empty-crosshair" aria-hidden="true" />
           <h2>Select a material change</h2>
-          <p>Its calculations, source excerpts, and interpretation boundary will appear here.</p>
+          <p>Its calculations, representative commentary, and interpretation boundary will appear here.</p>
         </div>
       )}
     </aside>

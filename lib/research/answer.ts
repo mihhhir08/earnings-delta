@@ -22,9 +22,9 @@ export function answerGroundedQuestion(company: CompanyData, mode: ComparisonMod
   const findMetric = (label: string) => analysis.snapshot.find((metric) => metric.label === label);
   const selectInsight = (id: string) => analysis.insights.find((insight) => insight.id === id);
   const metricQuestion = metricQuestions.find(({ terms }) => terms.some((term) => normalized.includes(term)));
-  const insight = normalized.includes("segment") || normalized.includes("driver") || normalized.includes("drove") ? selectInsight("segment-driver")
-    : normalized.includes("cash conversion") ? selectInsight("cash-flow-divergence")
-    : normalized.includes("operating leverage") ? selectInsight("operating-leverage")
+  const insight = normalized.includes("segment") || normalized.includes("led the revenue") || normalized.includes("revenue movement") ? selectInsight("segment-revenue-movement")
+    : normalized.includes("free cash flow") && (normalized.includes("diverge") || normalized.includes("revenue")) ? selectInsight("cash-flow-divergence")
+    : normalized.includes("operating income") && normalized.includes("revenue") ? selectInsight("operating-income-vs-revenue")
     : metricQuestion?.key === "grossMargin" ? selectInsight("margin-change")
     : metricQuestion?.key === "revenue" || normalized.includes("growth") ? selectInsight("revenue-change")
     : undefined;
@@ -35,7 +35,7 @@ export function answerGroundedQuestion(company: CompanyData, mode: ComparisonMod
       answer: `${insight.summary}${causeLimited ? " The available record verifies the change but does not establish a separate cause." : ""}`,
       confidence: insight.confidence,
       evidence: insight.evidence.slice(0, 3).map(({ label, detail }) => ({ label, detail })),
-      limited: insight.confidence === "AI Interpretation" || causeLimited,
+      limited: insight.confidence === "Interpretation" || causeLimited,
     };
   }
 
@@ -58,7 +58,7 @@ export function answerGroundedQuestion(company: CompanyData, mode: ComparisonMod
   }
 
   return {
-    answer: "This MVP record cannot support that question reliably. Try revenue, gross margin, operating income, net income, EPS, segments, operating leverage, or free cash flow.",
+    answer: "The selected record does not contain enough evidence to answer that reliably. Try revenue, gross margin, operating income, net income, EPS, segments, operating income relative to revenue, or free cash flow.",
     confidence: "Verified",
     evidence: [],
     limited: true,

@@ -6,7 +6,7 @@ export interface FinancialDataProvider {
   getCompany(ticker: string): Promise<CompanyData | null>;
 }
 
-export class MockFinancialDataProvider implements FinancialDataProvider {
+export class RepresentativeFinancialDataProvider implements FinancialDataProvider {
   async listCompanies() {
     return companyData.map(({ ticker, name }) => ({ ticker, name }));
   }
@@ -16,4 +16,4 @@ export class MockFinancialDataProvider implements FinancialDataProvider {
   }
 }
 
-export const financialDataProvider: FinancialDataProvider = new MockFinancialDataProvider();
+export const financialDataProvider: FinancialDataProvider = new RepresentativeFinancialDataProvider();

@@ -1,5 +1,8 @@
 "use client";
 
+// Adapted from React Bits: https://reactbits.dev/backgrounds/beams
+// License notice: ../THIRD_PARTY_NOTICES.md
+
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState, type FC, type ReactNode } from "react";

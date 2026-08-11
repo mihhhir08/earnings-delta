@@ -32,7 +32,6 @@ export default async function HomePage() {
         title: topInsight.title,
         summary: topInsight.summary,
         confidence: topInsight.confidence,
-        score: topInsight.score,
       },
       href: `/research/${company.ticker}`,
     };

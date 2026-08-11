@@ -2,54 +2,65 @@
 
 ## Application shape
 
-Earnings Delta is one Next.js App Router application. Server components load company analysis through a provider, client components handle comparison controls, evidence inspection, and grounded questions, and Route Handlers expose a small validated API. There is no separate backend or database.
+Earnings Delta is a single Next.js App Router application with no database or separate backend service.
 
 ```text
 Browser
   ├─ /                         Landing page
   └─ /research/[ticker]        Research workspace
-       └─ /api/ask                Validated grounded Q&A
+       └─ /api/ask             Validated deterministic question route
                 ↓
         FinancialDataProvider
                 ↓
-        MockFinancialDataProvider
+ RepresentativeFinancialDataProvider
                 ↓
-     deterministic analysis pipeline
+       Deterministic analysis
 ```
 
-## Frontend and server structure
+## Code boundaries
 
-- `app/` owns routes, layouts, loading/error states, and API handlers.
-- `components/` owns the research workspace and interactive evidence/Q&A UI.
-- `lib/finance/` owns calculations, formatting inputs, materiality, and insight generation.
-- `lib/data/` contains typed representative demo companies and periods.
-- `lib/providers/` defines the provider contract and mock implementation.
-- `lib/schemas/` validates API inputs and optional structured AI output.
+- `app/` owns routes, metadata, loading/error states, and the question route handler.
+- `components/` owns the landing experience, workspace controls, trends, findings, evidence panel, and question interface.
+- `lib/data/` contains typed representative company records.
+- `lib/providers/` defines the data-provider contract and in-memory representative implementation.
+- `lib/finance/` owns changes, formatting, materiality, confidence assignment, and finding generation.
+- `lib/research/` maps supported questions to the active deterministic analysis.
+- `lib/schemas.ts` validates question requests and responses with Zod.
 
 ## Data flow
 
-1. A route validates the ticker and comparison mode.
-2. The provider returns the company, ordered periods, statements, KPIs, segments, filings, transcripts, and prices.
-3. The analysis pipeline selects current, prior-quarter, and prior-year periods; normalizes missing values; calculates changes; scores materiality; and ranks observations.
-4. Evidence IDs are attached during deterministic insight creation, not retrofitted in the UI.
-5. The client receives a serializable analysis object and filters views without recomputing business logic.
+1. The route validates the ticker and loads the corresponding company record through `FinancialDataProvider`.
+2. The provider returns ordered periods with financial metrics, segment values, and representative filing/transcript commentary.
+3. The analysis selects the latest, prior-quarter, and prior-year periods and calculates financial changes.
+4. Finding generation computes materiality, assigns confidence, and attaches calculation or commentary evidence.
+5. The client switches between quarter-over-quarter and year-over-year analysis already calculated on the server.
+6. `/api/ask` validates a question, resolves it against supported metrics or findings, and returns a validated response.
 
-## Material change pipeline
+## Materiality and confidence
 
-Materiality is deliberately explainable: normalized magnitude (0–60), company relevance (0–25), and corroborating evidence (0–15), capped at 100. Segment contribution and divergence observations use the same scale. Importance bands are High (75+), Medium (45–74), and Monitor (below 45).
+Materiality is based only on financial magnitude and company relevance. Magnitude contributes up to 75 points and relevance up to 25 points, capped at 100. The internal score maps to `High`, `Medium`, or `Monitor` importance bands; the raw number is not displayed in the primary interface.
 
-## AI pipeline
+Confidence is independent of materiality:
 
-The no-key path maps common questions to deterministic analysis and returns cited evidence. The provider boundary allows an optional LLM implementation later: assemble only active-company context, request structured JSON, validate with Zod, reject unknown evidence IDs, and label unsupported causal language as interpretation. Arbitrary model text is never rendered directly.
+- `Verified` uses structured calculations.
+- `Supported` adds representative commentary that names the relevant subject.
+- `Interpretation` marks a calculated relationship whose cause is not established.
 
-## Provider abstraction
+Evidence availability can change confidence, but it cannot increase materiality.
 
-`FinancialDataProvider` describes the actual domain operations needed by the product. `MockFinancialDataProvider` is the only implementation in the public demo. A Fiscal.ai implementation is intentionally omitted until official, accessible documentation and credentials are available; this avoids inventing endpoints or response shapes.
+## Question resolution
 
-## Deployment model and decisions
+`lib/research/answer.ts` uses deterministic term matching to select a supported metric or finding from the active comparison. Responses include calculation evidence, representative commentary when applicable, and a scope-limitation response for unsupported questions.
 
-- One repository and one Vercel project keep deployment reviewable.
-- Static mock data makes the public demo deterministic and secret-free.
-- Route Handlers provide a real server boundary without a second service.
-- Native CSS and focused React state replace a UI framework; Zod and Vitest remain because boundary validation and financial correctness materially benefit from them.
-- No chart dependency: the core comparison is clearer as aligned values, delta rails, and evidence-linked observations.
+## Trends
+
+The research workspace renders an authored SVG trend view for revenue, gross margin, and free cash flow across all five representative periods. No charting dependency is used.
+
+## Deployment
+
+The application deploys as one Vercel project. The representative dataset is bundled with the application, and no environment variables or persistent storage are required.
+
+## Future extensions
+
+- A verified Fiscal.ai implementation can satisfy the existing `FinancialDataProvider` contract.
+- A grounded LLM can be added as a separate research implementation for broader questions, with constrained context, evidence references, and schema-validated output.

@@ -1,69 +1,53 @@
 # Earnings Delta
 
-**The quarter changed. Find out where.**
+**See what changed. Verify why.**
 
-[Open the live demo](https://earnings-delta.vercel.app/)
+[Open Earnings Delta](https://earnings-delta.vercel.app/)
 
-## Problem
+Earnings Delta is an evidence-first financial research workspace. It compares reporting periods, identifies financially meaningful changes, and keeps each conclusion connected to its calculation and representative commentary.
 
-Financial filings and earnings calls contain the explanation behind company performance, but connecting the numbers to material changes and their causes takes time. Most financial dashboards display values. Earnings Delta focuses on identifying what materially changed and exposing the evidence behind each conclusion.
+## Current functionality
 
-## Solution
-
-Earnings Delta compares reporting periods, calculates financial changes deterministically, ranks material observations, and connects conclusions to structured evidence and representative management commentary. Follow-up questions stay grounded in the company and comparison already in view.
-
-## Core Features
-
-- Research demos for NVDA, AAPL, and MSFT
-- Interactive product walkthrough using the same calculated research output as the workspace
+- Research workspaces for NVDA, AAPL, and MSFT
 - Quarter-over-quarter and year-over-year comparisons
-- Financial snapshot with context-aware movement labels
-- Five-period financial trajectory for revenue, gross margin, and free cash flow
-- Deterministic material change detection and ranking
-- `Verified`, `Supported`, and `AI Interpretation` confidence states
-- Evidence drawer linking calculations and commentary to each insight
-- Grounded follow-up research with a deterministic fallback
+- Six-metric financial snapshot with context-aware movement labels
+- Five-period revenue, gross-margin, and free-cash-flow trends
+- Material changes ranked by financial magnitude and company relevance
+- Separate confidence labels: `Verified`, `Supported`, and `Interpretation`
+- Evidence panel with calculations, representative commentary, and interpretation boundaries
+- Deterministic answers for supported questions about the active company and comparison
+
+## Data and research model
+
+The application uses a typed representative dataset containing five reporting periods for each company. Financial statements and segment values drive every calculation. The stored filing and transcript commentary is representative and is not presented as verbatim company disclosure.
+
+Materiality and confidence answer different questions:
+
+- **Materiality** reflects the magnitude of a financial movement and its relevance to the company. Internally, magnitude contributes up to 75 points and relevance up to 25 points; evidence availability does not affect this score.
+- **Confidence** describes the support behind a finding. `Verified` is calculated from structured values, `Supported` adds matching representative commentary, and `Interpretation` identifies a calculated pattern whose cause is not established.
+
+The question interface uses deterministic intent matching. It can answer about revenue, gross margin, operating income, net income, diluted EPS, segment revenue movement, operating income relative to revenue growth, and free-cash-flow divergence. Unsupported questions return a clear scope limitation.
 
 ## Architecture
 
-Earnings Delta is one Next.js App Router application deployed through Vercel. Strict TypeScript, server-side finance modules, and Zod validation keep calculations and API boundaries explicit. A `FinancialDataProvider` abstraction isolates the current mock provider and provides a clean path to a verified Fiscal.ai provider. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+Earnings Delta is a single Next.js App Router application. Server components obtain company records through a `FinancialDataProvider`; deterministic finance modules compute comparisons and findings; client components manage comparison controls, evidence inspection, and questions. A Zod-validated route handler serves question responses. There is no database or separate backend service.
 
-## Tech Stack
+See [Architecture](docs/ARCHITECTURE.md) and [Product requirements](docs/PRD.md).
 
-Next.js, React, TypeScript, Tailwind CSS, Three.js with React Three Fiber, Zod, Vitest, and Vercel.
+## Technology
 
-## Material Change Detection
+Next.js, React, TypeScript, Three.js with React Three Fiber, Zod, Vitest, CSS, and Vercel.
 
-Calculations happen before any AI interpretation. The engine normalizes reporting periods, computes absolute, percentage, percentage-point, cash-flow-divergence, and segment-contribution changes, then ranks observations with an explainable 0 to 100 materiality score:
-
-- Magnitude: up to 60 points
-- Company relevance: up to 25 points
-- Corroborating evidence: 15 points
-
-## Evidence Grounding
-
-Numerical claims originate from structured financial data, and evidence references are attached while insights are created. Confidence states distinguish directly calculated facts (`Verified`), claims supported by stored commentary (`Supported`), and reasonable but unproven inferences (`AI Interpretation`). Insufficient evidence produces an explicit limitation.
-
-The public demo uses representative filing commentary, representative transcript commentary, and demo evidence snippets to demonstrate the evidence workflow. They are not presented as verbatim excerpts from company source documents.
-
-## Data Source Strategy
-
-The public demo uses representative financial data so the complete workflow runs without paid APIs or secrets. The provider architecture is designed so a verified Fiscal.ai integration can replace the mock provider without changing the analysis or interface layers.
-
-## Local Development
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). No environment variables are required for the default demo. `.env.example` documents the optional key reserved for a future LLM provider.
+Open [http://localhost:3000](http://localhost:3000). The current application does not require environment variables.
 
-## Deployment
-
-The production application is deployed at [earnings-delta.vercel.app](https://earnings-delta.vercel.app/). A fork can be deployed by importing the repository into Vercel with the default Next.js settings. No database or persistent filesystem is required.
-
-## Testing
+## Verification
 
 ```bash
 npm test
@@ -72,22 +56,18 @@ npm run lint
 npm run build
 ```
 
-## Known Limitations
+## Current limitations
 
-- Representative demo data rather than live financial data
-- No live Fiscal.ai adapter
-- Deterministic research fallback when an LLM provider is unavailable
+- Financial values and commentary come from a representative dataset rather than a live data feed.
+- Coverage is limited to NVDA, AAPL, and MSFT, with five periods per company.
+- The question interface supports a defined set of financial-change topics rather than open-ended research.
 
-## Future Improvements
+## Future extensions
 
-- Add a verified Fiscal.ai provider
-- Add a schema-validated, grounded LLM provider
-- Expand company coverage and issuer-specific KPIs
+- Integrate verified Fiscal.ai data for broader, current company coverage.
+- Add a grounded LLM for broader questions, constrained to cited financial context and validated output.
+- Expand company coverage, history, and issuer-specific operating metrics.
 
-## Why I Built This
+## Third-party software
 
-**Built from a question worth exploring.**
-
-After interviewing for a Full Stack Developer role at Fiscal.ai, I kept thinking about one problem: how can structured financial data, earnings reports, transcripts, and AI work together without losing trust or traceability?
-
-Earnings Delta is my attempt to answer that by building the workflow itself. It helps investors move from a reported number to understanding what changed, why it matters, and what evidence supports the conclusion.
+The landing-page Beams background is adapted from React Bits. See [Third-Party Notices](THIRD_PARTY_NOTICES.md) for attribution and license terms.

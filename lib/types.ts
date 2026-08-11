@@ -9,16 +9,16 @@ export type MetricKey =
   | "capitalExpenditures"
   | "freeCashFlow";
 
-export type Confidence = "Verified" | "Supported" | "AI Interpretation";
+export type Confidence = "Verified" | "Supported" | "Interpretation";
 export type Importance = "High" | "Medium" | "Monitor";
 export type ComparisonMode = "qoq" | "yoy";
 
-export interface SourceExcerpt {
+export interface RepresentativeCommentary {
   id: string;
   kind: "filing" | "transcript";
   title: string;
   speaker?: string;
-  excerpt: string;
+  text: string;
 }
 
 export interface FinancialPeriod {
@@ -29,8 +29,7 @@ export interface FinancialPeriod {
   ended: string;
   metrics: Record<MetricKey, number | null>;
   segments: Record<string, number>;
-  kpis: Record<string, { value: number; unit: string }>;
-  sources: SourceExcerpt[];
+  commentary: RepresentativeCommentary[];
 }
 
 export interface CompanyData {
@@ -39,7 +38,6 @@ export interface CompanyData {
   exchange: string;
   sector: string;
   periods: FinancialPeriod[];
-  prices: { date: string; close: number }[];
 }
 
 export interface ChangeValue {
@@ -55,7 +53,7 @@ export interface EvidenceItem {
   kind: "structured" | "commentary" | "interpretation";
   label: string;
   detail: string;
-  source?: SourceExcerpt;
+  commentary?: RepresentativeCommentary;
 }
 
 export interface Insight {

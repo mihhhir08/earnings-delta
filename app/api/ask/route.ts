@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { answerGroundedQuestion } from "@/lib/ai/answer";
+import { answerGroundedQuestion } from "@/lib/research/answer";
 import { financialDataProvider } from "@/lib/providers/financial";
 import { askDeltaRequestSchema, askDeltaResponseSchema } from "@/lib/schemas";
 

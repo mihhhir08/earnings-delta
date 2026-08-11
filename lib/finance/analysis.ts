@@ -51,10 +51,10 @@ export function segmentContribution(current: number, comparison: number, revenue
   return revenueDelta === 0 ? null : ((current - comparison) / revenueDelta) * 100;
 }
 
-export function materialityScore(magnitude: number, relevance: number, hasEvidence: boolean): number {
-  const magnitudePoints = Math.min(60, Math.max(0, magnitude) * 3);
+export function materialityScore(magnitude: number, relevance: number): number {
+  const magnitudePoints = Math.min(75, Math.max(0, magnitude) * 3);
   const relevancePoints = Math.min(25, Math.max(0, relevance));
-  return Math.round(Math.min(100, magnitudePoints + relevancePoints + (hasEvidence ? 15 : 0)));
+  return Math.round(Math.min(100, magnitudePoints + relevancePoints));
 }
 
 function importance(score: number): Importance {
@@ -86,21 +86,21 @@ function structuredEvidence(key: MetricKey, change: ChangeValue, current: Financ
   };
 }
 
-function sourceEvidence(period: FinancialPeriod, index = 0): EvidenceItem {
-  const source = period.sources[index] ?? period.sources[0];
+function commentaryEvidence(period: FinancialPeriod, index = 0): EvidenceItem {
+  const commentary = period.commentary[index] ?? period.commentary[0];
   return {
-    id: source.id,
+    id: commentary.id,
     kind: "commentary",
-    label: source.kind === "filing" ? "Representative filing commentary" : "Representative transcript commentary",
-    detail: source.excerpt,
-    source,
+    label: commentary.kind === "filing" ? "Representative filing commentary" : "Representative transcript commentary",
+    detail: commentary.text,
+    commentary,
   };
 }
 
-function matchingSourceEvidence(period: FinancialPeriod, subject: string): EvidenceItem | null {
+function matchingCommentaryEvidence(period: FinancialPeriod, subject: string): EvidenceItem | null {
   const normalized = subject.toLowerCase();
-  const index = period.sources.findIndex((source) => source.excerpt.toLowerCase().includes(normalized));
-  return index === -1 ? null : sourceEvidence(period, index);
+  const index = period.commentary.findIndex((commentary) => commentary.text.toLowerCase().includes(normalized));
+  return index === -1 ? null : commentaryEvidence(period, index);
 }
 
 function makeInsight(input: Omit<Insight, "importance">): Insight {
@@ -117,7 +117,7 @@ export function generateInsights(company: CompanyData, current: FinancialPeriod,
   const insights: Insight[] = [];
 
   if (revenue.percent !== null) {
-    const score = materialityScore(Math.abs(revenue.percent), 23, true);
+    const score = materialityScore(Math.abs(revenue.percent), 23);
     insights.push(makeInsight({
       id: "revenue-change",
       title: revenue.percent >= 0 ? "Top-line expansion" : "Revenue contraction",
@@ -137,46 +137,46 @@ export function generateInsights(company: CompanyData, current: FinancialPeriod,
   const lead = segmentDeltas[0];
   if (lead) {
     const contribution = segmentContribution(lead.value, lead.prior, revenueDelta);
-    const source = matchingSourceEvidence(current, lead.name);
+    const commentary = matchingCommentaryEvidence(current, lead.name);
     const offset = contribution !== null && contribution > 100
       ? ` Other segments offset ${formatFinancialValue("revenue", Math.abs(lead.delta) - Math.abs(revenueDelta))} of that movement.`
       : "";
-    const score = materialityScore(Math.abs(contribution ?? 0) / 4, 25, true);
+    const score = materialityScore(Math.abs(contribution ?? 0) / 4, 25);
     insights.push(makeInsight({
-      id: "segment-driver",
-      title: `${lead.name} drove the change`,
+      id: "segment-revenue-movement",
+      title: `${lead.name} led the revenue movement`,
       summary: `${lead.name} changed by ${formatFinancialValue("revenue", lead.delta)} and represented ${contribution === null ? "an unmeasurable share" : `${Math.abs(contribution).toFixed(0)}%`} of the net revenue movement.${offset}`,
       score,
-      confidence: source ? "Supported" : "Verified",
+      confidence: commentary ? "Supported" : "Verified",
       supportingMetrics: [`${lead.name} revenue`, "Total revenue", "Segment contribution"],
       evidence: [
         { id: "segment-calculation", kind: "structured", label: "Segment contribution", detail: `${formatFinancialValue("revenue", lead.value)} − ${formatFinancialValue("revenue", lead.prior)} = ${formatFinancialValue("revenue", lead.delta)}; divided by the ${formatFinancialValue("revenue", revenueDelta)} company revenue change = ${contribution === null ? "not meaningful" : `${Math.abs(contribution).toFixed(0)}%`}.` },
-        ...(source ? [source] : []),
+        ...(commentary ? [commentary] : []),
       ],
     }));
   }
 
   if (grossMargin.percentagePoints !== null && Math.abs(grossMargin.percentagePoints) >= 0.4) {
     const falling = grossMargin.percentagePoints < 0;
-    const source = matchingSourceEvidence(current, "gross margin");
-    const score = materialityScore(Math.abs(grossMargin.percentagePoints) * 5, 22, true);
+    const commentary = matchingCommentaryEvidence(current, "gross margin");
+    const score = materialityScore(Math.abs(grossMargin.percentagePoints) * 5, 22);
     insights.push(makeInsight({
       id: "margin-change",
       title: falling ? "Gross margin compressed" : "Gross margin expanded",
       summary: `Gross margin moved ${signed(grossMargin.percentagePoints, " percentage points")} ${label}${falling && revenueGrowth > 0 ? " even as revenue increased" : ""}.`,
       score,
-      confidence: source ? "Supported" : "Verified",
+      confidence: commentary ? "Supported" : "Verified",
       supportingMetrics: ["Gross margin", "Gross profit", "Revenue"],
-      evidence: [structuredEvidence("grossMargin", grossMargin, current, comparison), ...(source ? [source] : [])],
+      evidence: [structuredEvidence("grossMargin", grossMargin, current, comparison), ...(commentary ? [commentary] : [])],
     }));
   }
 
   if (operatingIncome.percent !== null && revenue.percent !== null && Math.abs(operatingIncome.percent - revenue.percent) >= 4) {
-    const leverage = operatingIncome.percent > revenue.percent;
-    const score = materialityScore(Math.abs(operatingIncome.percent - revenue.percent), 20, false);
+    const outpaced = operatingIncome.percent > revenue.percent;
+    const score = materialityScore(Math.abs(operatingIncome.percent - revenue.percent), 20);
     insights.push(makeInsight({
-      id: "operating-leverage",
-      title: leverage ? "Operating leverage improved" : "Operating leverage weakened",
+      id: "operating-income-vs-revenue",
+      title: outpaced ? "Operating income outpaced revenue growth" : "Operating income trailed revenue growth",
       summary: `Operating income changed ${signed(operatingIncome.percent)} versus revenue at ${signed(revenue.percent)}, a ${Math.abs(operatingIncome.percent - revenue.percent).toFixed(1)}-point growth gap.`,
       score,
       confidence: "Verified",
@@ -186,18 +186,17 @@ export function generateInsights(company: CompanyData, current: FinancialPeriod,
   }
 
   if (freeCashFlow.percent !== null && revenue.percent !== null && Math.abs(freeCashFlow.percent - revenue.percent) >= 12) {
-    const improving = freeCashFlow.percent > revenue.percent;
-    const score = materialityScore(Math.abs(freeCashFlow.percent - revenue.percent) / 2, 24, false);
+    const score = materialityScore(Math.abs(freeCashFlow.percent - revenue.percent) / 2, 24);
     insights.push(makeInsight({
       id: "cash-flow-divergence",
-      title: `Cash conversion ${improving ? "outpaced" : "lagged"} growth`,
+      title: "Free cash flow diverged from revenue",
       summary: `Free cash flow changed ${signed(freeCashFlow.percent)} while revenue changed ${signed(revenue.percent)}. The ${Math.abs(freeCashFlow.percent - revenue.percent).toFixed(1)}-point divergence merits follow-up.`,
       score,
-      confidence: "AI Interpretation",
+      confidence: "Interpretation",
       supportingMetrics: ["Free cash flow", "Operating cash flow", "Revenue"],
       evidence: [
         structuredEvidence("freeCashFlow", freeCashFlow, current, comparison),
-        { id: "cash-interpretation", kind: "interpretation", label: "Interpretation boundary", detail: "The divergence is calculated, but its cause is not directly established by the available source excerpts." },
+        { id: "cash-interpretation", kind: "interpretation", label: "Interpretation boundary", detail: "The divergence is calculated, but its cause is not directly established by the available representative commentary." },
       ],
     }));
   }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { answerGroundedQuestion } from "../lib/ai/answer";
+import { answerGroundedQuestion } from "../lib/research/answer";
 import { companyData } from "../lib/data/companies";
 import { analyzeCompany, calculateChange, materialityScore, segmentContribution } from "../lib/finance/analysis";
 
@@ -26,9 +26,9 @@ describe("financial change calculations", () => {
 });
 
 describe("materiality", () => {
-  it("combines magnitude, relevance, and evidence with a 100 point cap", () => {
-    expect(materialityScore(10, 20, true)).toBe(65);
-    expect(materialityScore(50, 25, true)).toBe(100);
+  it("combines magnitude and relevance with a 100 point cap", () => {
+    expect(materialityScore(10, 20)).toBe(50);
+    expect(materialityScore(50, 25)).toBe(100);
   });
 
   it("calculates segment contribution", () => {
@@ -58,7 +58,7 @@ describe("representative research demo", () => {
     expect(yoy.comparisonPeriod.label).toBe("FY 2024 Q4");
     expect(qoq.snapshot.find(({ key }) => key === "revenue")?.qoq.percent).toBeCloseTo(12.1, 1);
     expect(yoy.snapshot.find(({ key }) => key === "revenue")?.yoy.percent).toBeCloseTo(78, 0);
-    expect(qoq.insights.find(({ id }) => id === "segment-driver")?.summary).toContain("offset");
+    expect(qoq.insights.find(({ id }) => id === "segment-revenue-movement")?.summary).toContain("offset");
     expect(qoq.insights.map(({ summary }) => summary)).not.toEqual(yoy.insights.map(({ summary }) => summary));
   });
 
@@ -94,7 +94,7 @@ describe("representative research demo", () => {
 
     expect(answer.limited).toBe(true);
     expect(answer.evidence).toHaveLength(0);
-    expect(answer.answer).toContain("cannot support");
+    expect(answer.answer).toContain("does not contain enough evidence");
   });
 
   it("does not invent a cause when commentary does not establish one", () => {

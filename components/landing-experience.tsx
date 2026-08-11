@@ -22,7 +22,6 @@ export interface LandingPreview {
     title: string;
     summary: string;
     confidence: string;
-    score: number;
   };
   href: string;
 }
@@ -56,8 +55,8 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
           <nav className="landing-nav" aria-label="Primary navigation">
             <Link className="wordmark" href="/"><DeltaMark /><span>Earnings Delta</span></Link>
             <div className="landing-nav-links">
-              <a href="#proof">What it proves</a>
-              <a href="#why">Why I built it</a>
+              <a href="#proof">How it works</a>
+              <a href="#why">Why it exists</a>
             </div>
             <Link className="nav-action" href={active.href}>Enter workspace <ArrowIcon /></Link>
           </nav>
@@ -80,10 +79,10 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
                 </span>
               ))}
             </h1>
-            <p>Earnings Delta turns quarterly results into ranked explanations you can trace back to the source.</p>
+            <p>Earnings Delta turns quarterly results into ranked explanations backed by visible evidence.</p>
             <div className="hero-actions">
               <Link className="primary-action" href={active.href}>Open research workspace <ArrowIcon /></Link>
-              <a className="secondary-action" href="https://github.com/mihhhir08/earnings-delta">View source <ExternalIcon /></a>
+              <a className="secondary-action" href="#proof">How it works <ArrowIcon /></a>
             </div>
           </div>
 
@@ -101,10 +100,9 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
 
             <div className="prism-body" key={active.ticker}>
               <div className="prism-result">
-                <div><span>{active.period} · {active.comparison}</span><b>Source support: {active.insight.confidence}</b></div>
+                <div><span>{active.period} · {active.comparison}</span><b>Confidence: {active.insight.confidence}</b></div>
                 <h2>{active.insight.title}</h2>
                 <p>{active.insight.summary}</p>
-                <div className="confidence-track"><span style={{ width: `${active.insight.score}%` }} /><small>Materiality {active.insight.score}/100</small></div>
               </div>
             </div>
 
@@ -126,19 +124,19 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
         <div className="proof-flow">
           <article><strong>Compare</strong><p>Normalize reporting periods and calculate the movement.</p></article>
           <article><strong>Explain</strong><p>Rank the operating changes that matter.</p></article>
-          <article><strong>Verify</strong><p>Trace each conclusion to calculation and source context.</p></article>
+          <article><strong>Verify</strong><p>Trace each conclusion to its calculation and representative commentary.</p></article>
         </div>
       </section>
 
       <section className="project-story" id="why">
         <div>
           <h2>Built from a question worth exploring.</h2>
-          <p>After interviewing for a Full Stack Developer role at Fiscal.ai, I kept thinking about one problem: how can structured financial data, earnings reports, transcripts, and AI work together without losing trust or traceability?</p>
-          <p>Earnings Delta is my attempt to answer that by building the workflow itself. It helps investors move from a reported number to understanding what changed, why it matters, and what evidence supports the conclusion.</p>
+          <p>Financial research often separates reported figures from the commentary that gives them context. Earnings Delta brings those pieces into one traceable workflow.</p>
+          <p>It helps investors move from a reported number to understanding what changed, why it matters, and what representative commentary supports the conclusion.</p>
         </div>
         <div className="project-outcome">
-          <strong>Working full-stack MVP.</strong>
-          <span>Interactive analysis · grounded answers · inspectable code</span>
+          <strong>A complete research workflow.</strong>
+          <span>Structured comparisons · ranked changes · traceable evidence</span>
           <Link className="primary-action" href={active.href}>Open research workspace <ArrowIcon /></Link>
         </div>
       </section>

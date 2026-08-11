@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import type { AskDeltaResponse } from "@/lib/schemas";
 import type { ComparisonMode } from "@/lib/types";
 
-const prompts = ["What drove the revenue change?", "Why did gross margin move?", "How did cash conversion change?"];
+const prompts = ["What led the revenue movement?", "Why did gross margin move?", "How did free cash flow diverge from revenue?"];
 
 function SendIcon() {
   return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m3 4 14 6-14 6 2-6-2-6Zm2 6h12" /></svg>;
@@ -52,7 +52,7 @@ export function AskDelta({ ticker, mode, currentPeriod, comparisonPeriod }: { ti
       {status === "error" && <div className="ask-error" role="alert">We could not complete that question. Please try again.</div>}
       {response && (
         <div className="ask-response" aria-live="polite">
-          <div className="answer-line"><span className={`confidence confidence-${response.limited && response.evidence.length === 0 ? "ai-interpretation" : response.confidence.toLowerCase().replace(" ", "-")}`}>{response.limited && response.evidence.length === 0 ? "Scope limit" : response.confidence}</span><p>{response.answer}</p></div>
+          <div className="answer-line"><span className={`confidence confidence-${response.limited && response.evidence.length === 0 ? "interpretation" : response.confidence.toLowerCase().replace(" ", "-")}`}>{response.limited && response.evidence.length === 0 ? "Scope limit" : response.confidence}</span><p>{response.answer}</p></div>
           {response.evidence.length > 0 && <div className="answer-evidence">{response.evidence.map((item) => <span key={item.label}><strong>{item.label}</strong>{item.detail}</span>)}</div>}
         </div>
       )}

@@ -8,7 +8,7 @@ export const askDeltaRequestSchema = z.object({
 
 export const askDeltaResponseSchema = z.object({
   answer: z.string(),
-  confidence: z.enum(["Verified", "Supported", "AI Interpretation"]),
+  confidence: z.enum(["Verified", "Supported", "Interpretation"]),
   evidence: z.array(z.object({ label: z.string(), detail: z.string() })).max(4),
   limited: z.boolean(),
 });

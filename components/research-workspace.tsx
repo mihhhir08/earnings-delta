@@ -47,7 +47,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
         <button className="change-hit" onClick={() => selectInsight(insight)} aria-label={`View evidence for ${insight.title}`}>
           <span className="change-number">{String(index + 1).padStart(2, "0")}</span>
           <div className="change-content">
-            <div className="change-meta"><span className={`importance importance-${insight.importance.toLowerCase()}`}><i />{insight.importance}</span><span className={`confidence confidence-${insight.confidence.toLowerCase().replace(" ", "-")}`}>{insight.confidence}</span><span>Materiality {insight.score}/100</span></div>
+            <div className="change-meta"><span className={`importance importance-${insight.importance.toLowerCase()}`}><i />{insight.importance}</span><span className={`confidence confidence-${insight.confidence.toLowerCase().replace(" ", "-")}`}>{insight.confidence}</span></div>
             <h3>{insight.title}</h3>
             <p>{insight.summary}</p>
             <div className="supporting-metrics">{insight.supportingMetrics.map((metric) => <span key={metric}>{metric}</span>)}</div>
@@ -74,13 +74,13 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
 
       <details className="dataset-disclosure">
         <summary>
-          <strong>MVP demo data</strong>
-          <span className="dataset-summary-copy">No external financial-data or AI API is connected</span>
-          <span className="dataset-action">Data methodology</span>
+          <strong>Representative dataset</strong>
+          <span className="dataset-summary-copy">Illustrative financials and commentary for period comparison</span>
+          <span className="dataset-action">About the data</span>
         </summary>
         <div className="dataset-methodology">
-          <p>This public MVP uses typed, representative records stored in the application so the complete workflow runs without credentials. Company selection loads a different record; comparison controls recompute deltas, segment contribution, rankings, evidence, and grounded answers. Ask Delta uses deterministic server logic, and the provider boundary is ready for a verified live-data adapter.</p>
-          <p><strong>Label guide.</strong> Verified means calculated from structured values. Supported adds matching representative commentary. AI Interpretation marks a calculated pattern without a confirmed cause. Materiality combines magnitude, company relevance, and available evidence. Commentary is representative and is not presented as verbatim company disclosure.</p>
+          <p>Figures are representative records used to demonstrate period comparison and evidence workflows. Selecting a company or comparison updates calculations and findings from that record.</p>
+          <p><strong>Label guide.</strong> Verified means calculated from structured values. Supported adds matching representative commentary. Interpretation marks a calculated pattern without a confirmed cause. Materiality reflects financial magnitude and company relevance. Commentary is representative and is not presented as verbatim company disclosure.</p>
         </div>
       </details>
 
@@ -119,7 +119,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
       <div className="research-main">
         <section className="changes-pane" aria-labelledby="changes-title">
           <div className="section-heading changes-heading">
-            <div><h2 id="changes-title">What changed</h2><p aria-live="polite">{analysis.currentPeriod.label} versus {analysis.comparisonPeriod.label}; ranked by magnitude, relevance, and evidence.</p></div>
+            <div><h2 id="changes-title">What changed</h2><p aria-live="polite">{analysis.currentPeriod.label} versus {analysis.comparisonPeriod.label}; ranked by financial magnitude and relevance.</p></div>
             <span>{analysis.insights.length} material observations</span>
           </div>
           <div className="change-list change-list-primary">{analysis.insights.slice(0, 1).map(renderInsight)}</div>
