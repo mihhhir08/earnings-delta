@@ -37,8 +37,8 @@ function period([id, label, fiscalYear, fiscalQuarter, ended, values, segments, 
     segments,
     kpis,
     sources: [
-      { id: `${id}-filing`, kind: "filing", title: `${label} earnings release`, excerpt: filing },
-      { id: `${id}-call`, kind: "transcript", title: `${label} earnings call`, speaker: "Management", excerpt: transcript },
+      { id: `${id}-filing`, kind: "filing", title: `${label} representative filing commentary`, excerpt: filing },
+      { id: `${id}-call`, kind: "transcript", title: `${label} representative transcript commentary`, speaker: "Management", excerpt: transcript },
     ],
   };
 }

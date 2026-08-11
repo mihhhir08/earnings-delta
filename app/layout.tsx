@@ -14,7 +14,7 @@ const displayFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Earnings Delta — Evidence-first financial research",
+  title: "Earnings Delta | Evidence-first financial research",
   description: "Compare reporting periods, detect material financial changes, and verify every conclusion against its evidence.",
 };
 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { AskDelta } from "@/components/ask-delta";
 import { EvidencePanel } from "@/components/evidence-panel";
+import { FinancialTrend } from "@/components/financial-trend";
 import { formatFinancialValue } from "@/lib/finance/analysis";
 import type { ComparisonMode, Insight, ResearchAnalysis } from "@/lib/types";
 
@@ -46,12 +47,12 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
         <button className="change-hit" onClick={() => selectInsight(insight)} aria-label={`View evidence for ${insight.title}`}>
           <span className="change-number">{String(index + 1).padStart(2, "0")}</span>
           <div className="change-content">
-            <div className="change-meta"><span className={`importance importance-${insight.importance.toLowerCase()}`}>{insight.importance} importance</span><span className={`confidence confidence-${insight.confidence.toLowerCase().replace(" ", "-")}`}>{insight.confidence}</span><span>Score {insight.score}</span></div>
+            <div className="change-meta"><span className={`importance importance-${insight.importance.toLowerCase()}`}><i />{insight.importance}</span><span className={`confidence confidence-${insight.confidence.toLowerCase().replace(" ", "-")}`}>{insight.confidence}</span><span>Materiality {insight.score}</span></div>
             <h3>{insight.title}</h3>
             <p>{insight.summary}</p>
             <div className="supporting-metrics">{insight.supportingMetrics.map((metric) => <span key={metric}>{metric}</span>)}</div>
           </div>
-          <span className="view-evidence"><EvidenceIcon /> View evidence</span>
+          <span className="view-evidence"><EvidenceIcon /> Inspect evidence</span>
         </button>
       </article>
     );
@@ -65,10 +66,13 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
           <SearchIcon />
           <label className="sr-only" htmlFor="company-selector">Select company</label>
           <select id="company-selector" value={analysis.company.ticker} onChange={(event) => router.push(`/research/${event.target.value}`)}>
-            {companies.map((company) => <option key={company.ticker} value={company.ticker}>{company.ticker} — {company.name}</option>)}
+            {companies.map((company) => <option key={company.ticker} value={company.ticker}>{company.ticker} · {company.name}</option>)}
           </select>
         </div>
-        <div className="header-status"><span className="status-dot" /> Demo data</div>
+        <details className="dataset-disclosure">
+          <summary><span className="status-dot" /> Representative dataset</summary>
+          <p>Representative financials and commentary demonstrate the full research workflow. Commentary is labeled and is not presented as a verbatim company source.</p>
+        </details>
       </header>
 
       <section className="issuer-band">
@@ -86,7 +90,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
       </section>
 
       <section className="snapshot" aria-labelledby="snapshot-title">
-        <div className="section-heading"><h2 id="snapshot-title">Financial snapshot</h2><span>USD millions, except per-share data</span></div>
+        <div className="section-heading"><h2 id="snapshot-title">Financial condition</h2><span>USD millions, except per-share data</span></div>
         <div className="snapshot-grid">
           {analysis.snapshot.map((metric) => (
             <article className="metric-cell" key={metric.key}>
@@ -101,10 +105,12 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
         </div>
       </section>
 
+      <FinancialTrend points={analysis.trend} />
+
       <div className="research-main">
         <section className="changes-pane" aria-labelledby="changes-title">
           <div className="section-heading changes-heading">
-            <div><h2 id="changes-title">What changed</h2><p>Ranked by magnitude, relevance, and evidence coverage.</p></div>
+            <div><h2 id="changes-title">What changed</h2><p>Ordered by materiality and evidence strength.</p></div>
             <span>{analysis.insights.length} material observations</span>
           </div>
           <div className="change-list change-list-primary">{analysis.insights.slice(0, 1).map(renderInsight)}</div>
@@ -115,7 +121,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
       </div>
 
       {evidenceOpen && <button className="mobile-scrim" onClick={() => setEvidenceOpen(false)} aria-label="Close evidence overlay" />}
-      <footer className="terminal-footer"><span><strong>Demo data.</strong> This public demo currently uses representative financial data for demonstration purposes.</span><span>Analysis as of {analysis.generatedAt}</span></footer>
+      <footer className="terminal-footer"><span>{analysis.currentPeriod.label} compared with {analysis.comparisonPeriod.label}</span><span>Analysis period ended {analysis.generatedAt}</span></footer>
     </main>
   );
 }

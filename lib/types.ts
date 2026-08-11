@@ -78,12 +78,20 @@ export interface MetricSnapshot {
   direction: "favorable" | "unfavorable" | "neutral";
 }
 
+export interface TrendPoint {
+  period: string;
+  revenue: number | null;
+  grossMargin: number | null;
+  freeCashFlow: number | null;
+}
+
 export interface ResearchAnalysis {
   company: Pick<CompanyData, "ticker" | "name" | "exchange" | "sector">;
   currentPeriod: Pick<FinancialPeriod, "id" | "label" | "ended">;
   comparisonPeriod: Pick<FinancialPeriod, "id" | "label" | "ended">;
   mode: ComparisonMode;
   snapshot: MetricSnapshot[];
+  trend: TrendPoint[];
   insights: Insight[];
   generatedAt: string;
 }

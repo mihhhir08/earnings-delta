@@ -66,7 +66,7 @@ function signed(value: number, suffix = "%") {
 }
 
 export function formatFinancialValue(key: MetricKey, value: number | null): string {
-  if (value === null) return "—";
+  if (value === null) return "n/a";
   if (key === "grossMargin") return `${value.toFixed(1)}%`;
   if (key === "eps") return `${value < 0 ? "−" : ""}$${Math.abs(value).toFixed(2)}`;
   const absolute = Math.abs(value);
@@ -91,7 +91,7 @@ function sourceEvidence(period: FinancialPeriod, index = 0): EvidenceItem {
   return {
     id: source.id,
     kind: "commentary",
-    label: source.kind === "filing" ? "Company filing" : "Management commentary",
+    label: source.kind === "filing" ? "Representative filing commentary" : "Representative transcript commentary",
     detail: source.excerpt,
     source,
   };
@@ -232,6 +232,12 @@ export function analyzeCompany(company: CompanyData, mode: ComparisonMode): Rese
     comparisonPeriod: { id: comparison.id, label: comparison.label, ended: comparison.ended },
     mode,
     snapshot,
+    trend: company.periods.toReversed().map((period) => ({
+      period: period.label,
+      revenue: period.metrics.revenue,
+      grossMargin: period.metrics.grossMargin,
+      freeCashFlow: period.metrics.freeCashFlow,
+    })),
     insights: generateInsights(company, current, comparison, mode),
     generatedAt: current.ended,
   };

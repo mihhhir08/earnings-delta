@@ -6,7 +6,7 @@ export default function NotFound() {
       <span className="state-code">Unsupported ticker</span>
       <h1>No research record exists for that company.</h1>
       <p>The public demo currently supports NVDA, AAPL, and MSFT.</p>
-      <Link className="primary-action" href="/research/NVDA">Open NVDA demo</Link>
+      <Link className="primary-action" href="/research/NVDA">Open NVDA research</Link>
     </main>
   );
 }

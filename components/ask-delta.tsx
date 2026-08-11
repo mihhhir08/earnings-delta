@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import type { AskDeltaResponse } from "@/lib/schemas";
 import type { ComparisonMode } from "@/lib/types";
 
-const prompts = ["What drove revenue growth?", "Why did gross margin change?", "Did free cash flow improve?"];
+const prompts = ["What drove the revenue change?", "Why did gross margin move?", "How did cash conversion change?"];
 
 function SendIcon() {
   return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m3 4 14 6-14 6 2-6-2-6Zm2 6h12" /></svg>;
@@ -35,8 +35,8 @@ export function AskDelta({ ticker, mode }: { ticker: string; mode: ComparisonMod
   return (
     <section className="ask-delta" aria-labelledby="ask-heading">
       <div className="ask-title">
-        <div><span className="ask-mark">Δ?</span><h2 id="ask-heading">Ask the Delta</h2></div>
-        <span className="no-key-state">Deterministic mode · no AI key</span>
+        <div><span className="ask-mark">Δ?</span><div><h2 id="ask-heading">Ask about this quarter</h2><p>Answers stay grounded in the current company record.</p></div></div>
+        <span className="grounding-state">Evidence linked</span>
       </div>
       <form onSubmit={submit}>
         <label className="sr-only" htmlFor="delta-question">Ask about this quarter</label>
@@ -48,8 +48,8 @@ export function AskDelta({ ticker, mode }: { ticker: string; mode: ComparisonMod
           {prompts.map((prompt) => <button key={prompt} onClick={(event) => submit(event, prompt)}>{prompt}</button>)}
         </div>
       )}
-      {status === "loading" && <div className="ask-status" role="status"><span /> Checking the active evidence set…</div>}
-      {status === "error" && <div className="ask-error" role="alert">The research endpoint did not respond. Try the question again.</div>}
+      {status === "loading" && <div className="ask-status" role="status"><span /> Reviewing the available evidence…</div>}
+      {status === "error" && <div className="ask-error" role="alert">We could not complete that question. Please try again.</div>}
       {response && (
         <div className="ask-response">
           <div className="answer-line"><span className={`confidence confidence-${response.confidence.toLowerCase().replace(" ", "-")}`}>{response.confidence}</span><p>{response.answer}</p></div>

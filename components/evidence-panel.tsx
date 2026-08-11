@@ -11,11 +11,12 @@ export function EvidencePanel({ insight, open, onClose }: { insight: Insight | n
         <>
           <header className="evidence-header">
             <div>
-              <span className="panel-id">Evidence record · {insight.id.replaceAll("-", " ")}</span>
+              <span className="panel-id">Evidence trail · {insight.id.replaceAll("-", " ")}</span>
               <h2>{insight.title}</h2>
             </div>
             <button className="icon-button" onClick={onClose} aria-label="Close evidence"><CloseIcon /></button>
           </header>
+          <div className="evidence-route" aria-label="Evidence structure"><span>Claim</span><i /><span>Calculation</span><i /><span>Source</span><i /><span>Confidence</span></div>
           <div className="evidence-summary">
             <span className={`confidence confidence-${insight.confidence.toLowerCase().replace(" ", "-")}`}>{insight.confidence}</span>
             <p>{insight.summary}</p>
@@ -25,9 +26,9 @@ export function EvidencePanel({ insight, open, onClose }: { insight: Insight | n
               <article className={`evidence-item evidence-${item.kind}`} key={item.id}>
                 <div className="evidence-index">E{String(index + 1).padStart(2, "0")}</div>
                 <div>
-                  <span className="evidence-kind">{item.kind === "structured" ? "Structured financial evidence" : item.kind === "commentary" ? "Management commentary" : "Interpretation boundary"}</span>
+                  <span className="evidence-kind">{item.kind === "structured" ? "Calculation" : item.kind === "commentary" ? "Representative commentary" : "Interpretation boundary"}</span>
                   <h3>{item.label}</h3>
-                  {item.source ? <blockquote>“{item.detail}”</blockquote> : <p>{item.detail}</p>}
+                  <p>{item.detail}</p>
                   {item.source && <small>{item.source.title}{item.source.speaker ? ` · ${item.source.speaker}` : ""}</small>}
                 </div>
               </article>
@@ -35,7 +36,7 @@ export function EvidencePanel({ insight, open, onClose }: { insight: Insight | n
           </div>
           <footer className="evidence-footer">
             <span>Evidence coverage</span>
-            <strong>{insight.evidence.length} linked records</strong>
+            <strong>{insight.evidence.length} linked items</strong>
           </footer>
         </>
       ) : (

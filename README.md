@@ -1,6 +1,6 @@
 # Earnings Delta
 
-**See what changed, understand why, and verify the evidence.**
+**The quarter changed. Find out where.**
 
 [Open the live demo](https://earnings-delta.vercel.app/)
 
@@ -10,17 +10,19 @@ Financial filings and earnings calls contain the explanation behind company perf
 
 ## Solution
 
-Earnings Delta compares reporting periods, calculates financial changes deterministically, ranks material observations, and connects conclusions to structured evidence and representative management commentary. Ask the Delta supports grounded follow-up research using only the active company context.
+Earnings Delta compares reporting periods, calculates financial changes deterministically, ranks material observations, and connects conclusions to structured evidence and representative management commentary. Follow-up questions stay grounded in the company and comparison already in view.
 
 ## Core Features
 
 - Research demos for NVDA, AAPL, and MSFT
+- Interactive product walkthrough using the same calculated research output as the workspace
 - Quarter-over-quarter and year-over-year comparisons
 - Financial snapshot with context-aware movement labels
+- Five-period financial trajectory for revenue, gross margin, and free cash flow
 - Deterministic material change detection and ranking
 - `Verified`, `Supported`, and `AI Interpretation` confidence states
 - Evidence drawer linking calculations and commentary to each insight
-- Ask the Delta with a deterministic no-key fallback
+- Grounded follow-up research with a deterministic fallback
 
 ## Architecture
 
