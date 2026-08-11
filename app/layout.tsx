@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -16,6 +16,13 @@ const displayFont = localFont({
 export const metadata: Metadata = {
   title: "Earnings Delta | Evidence-first financial research",
   description: "Compare reporting periods, detect material financial changes, and verify every conclusion against its evidence.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#050505",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

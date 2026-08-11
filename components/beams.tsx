@@ -222,7 +222,7 @@ const DirectionalLight: FC<{ position: [number, number, number]; color: string }
 };
 
 const CanvasWrapper: FC<{ children: ReactNode; reducedMotion: boolean }> = ({ children, reducedMotion }) => (
-  <Canvas dpr={[1, 2]} frameloop={reducedMotion ? "demand" : "always"} style={{ width: "100%", height: "100%", position: "relative" }}>
+  <Canvas dpr={[1, 1.5]} frameloop={reducedMotion ? "demand" : "always"} style={{ width: "100%", height: "100%", position: "relative" }}>
     {children}
   </Canvas>
 );

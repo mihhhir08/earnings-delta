@@ -21,13 +21,15 @@ export function EvidencePanel({ insight, open, onClose }: { insight: Insight | n
   }, []);
 
   useEffect(() => {
-    if (!overlay) return;
-    if (open) {
-      previousFocus.current = document.activeElement as HTMLElement | null;
-      panelRef.current?.focus();
-      return;
-    }
-    previousFocus.current?.focus();
+    if (!overlay || !open) return;
+    previousFocus.current = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    panelRef.current?.focus();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      previousFocus.current?.focus();
+    };
   }, [open, overlay]);
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
