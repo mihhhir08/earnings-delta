@@ -93,5 +93,4 @@ export interface ResearchAnalysis {
   snapshot: MetricSnapshot[];
   trend: TrendPoint[];
   insights: Insight[];
-  generatedAt: string;
 }

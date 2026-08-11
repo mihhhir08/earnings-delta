@@ -82,7 +82,7 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
             </h1>
             <p>Earnings Delta turns quarterly results into ranked explanations you can trace back to the source.</p>
             <div className="hero-actions">
-              <Link className="primary-action" href={active.href}>Open live workspace <ArrowIcon /></Link>
+              <Link className="primary-action" href={active.href}>Open research workspace <ArrowIcon /></Link>
               <a className="secondary-action" href="https://github.com/mihhhir08/earnings-delta">View source <ExternalIcon /></a>
             </div>
           </div>
@@ -104,7 +104,7 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
                 <div><span>{active.period} · {active.comparison}</span><b>Source support: {active.insight.confidence}</b></div>
                 <h2>{active.insight.title}</h2>
                 <p>{active.insight.summary}</p>
-                <div className="confidence-track"><span style={{ width: `${active.insight.score}%` }} /><small>Materiality {active.insight.score}</small></div>
+                <div className="confidence-track"><span style={{ width: `${active.insight.score}%` }} /><small>Materiality {active.insight.score}/100</small></div>
               </div>
             </div>
 
@@ -139,7 +139,7 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
         <div className="project-outcome">
           <strong>Working full-stack MVP.</strong>
           <span>Interactive analysis · grounded answers · inspectable code</span>
-          <Link className="primary-action" href={active.href}>Open live workspace <ArrowIcon /></Link>
+          <Link className="primary-action" href={active.href}>Open research workspace <ArrowIcon /></Link>
         </div>
       </section>
 

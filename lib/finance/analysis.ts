@@ -158,15 +158,16 @@ export function generateInsights(company: CompanyData, current: FinancialPeriod,
 
   if (grossMargin.percentagePoints !== null && Math.abs(grossMargin.percentagePoints) >= 0.4) {
     const falling = grossMargin.percentagePoints < 0;
+    const source = matchingSourceEvidence(current, "gross margin");
     const score = materialityScore(Math.abs(grossMargin.percentagePoints) * 5, 22, true);
     insights.push(makeInsight({
       id: "margin-change",
       title: falling ? "Gross margin compressed" : "Gross margin expanded",
       summary: `Gross margin moved ${signed(grossMargin.percentagePoints, " percentage points")} ${label}${falling && revenueGrowth > 0 ? " even as revenue increased" : ""}.`,
       score,
-      confidence: "Supported",
+      confidence: source ? "Supported" : "Verified",
       supportingMetrics: ["Gross margin", "Gross profit", "Revenue"],
-      evidence: [structuredEvidence("grossMargin", grossMargin, current, comparison), sourceEvidence(current, 1)],
+      evidence: [structuredEvidence("grossMargin", grossMargin, current, comparison), ...(source ? [source] : [])],
     }));
   }
 
@@ -250,6 +251,5 @@ export function analyzeCompany(company: CompanyData, mode: ComparisonMode): Rese
       freeCashFlow: period.metrics.freeCashFlow,
     })),
     insights: generateInsights(company, current, comparison, mode),
-    generatedAt: current.ended,
   };
 }

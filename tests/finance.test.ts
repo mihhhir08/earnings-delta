@@ -67,6 +67,9 @@ describe("representative research demo", () => {
         for (const insight of analyzeCompany(company, mode)!.insights) {
           if (insight.confidence === "Supported") {
             expect(insight.evidence.some(({ kind }) => kind === "commentary")).toBe(true);
+            if (insight.id === "margin-change") {
+              expect(insight.evidence.find(({ kind }) => kind === "commentary")?.detail).toMatch(/gross margin/i);
+            }
           }
         }
       }

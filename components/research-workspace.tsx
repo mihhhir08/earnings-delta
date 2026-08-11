@@ -17,10 +17,6 @@ function EvidenceIcon() {
   return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3h8l3 3v11H5V3Z" /><path d="M13 3v4h3M8 10h5M8 13h5" /></svg>;
 }
 
-function SignalTrace() {
-  return <svg viewBox="0 0 320 64" aria-hidden="true"><path d="M2 40h52l11-17 18 31 17-45 20 31h42l10-10 13 10h133" /></svg>;
-}
-
 function formatDelta(value: number | null, margin = false) {
   if (value === null) return "n/m";
   return `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}${margin ? " pp" : "%"}`;
@@ -51,7 +47,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
         <button className="change-hit" onClick={() => selectInsight(insight)} aria-label={`View evidence for ${insight.title}`}>
           <span className="change-number">{String(index + 1).padStart(2, "0")}</span>
           <div className="change-content">
-            <div className="change-meta"><span className={`importance importance-${insight.importance.toLowerCase()}`}><i />{insight.importance}</span><span className={`confidence confidence-${insight.confidence.toLowerCase().replace(" ", "-")}`}>{insight.confidence}</span><span>Materiality {insight.score}</span></div>
+            <div className="change-meta"><span className={`importance importance-${insight.importance.toLowerCase()}`}><i />{insight.importance}</span><span className={`confidence confidence-${insight.confidence.toLowerCase().replace(" ", "-")}`}>{insight.confidence}</span><span>Materiality {insight.score}/100</span></div>
             <h3>{insight.title}</h3>
             <p>{insight.summary}</p>
             <div className="supporting-metrics">{insight.supportingMetrics.map((metric) => <span key={metric}>{metric}</span>)}</div>
@@ -74,18 +70,25 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
             {companies.map((company) => <option key={company.ticker} value={company.ticker}>{company.ticker} · {company.name}</option>)}
           </select>
         </div>
-        <details className="dataset-disclosure">
-          <summary><span className="status-dot" /> Representative dataset</summary>
-          <p>Calculations update from the selected company and comparison period. Commentary is representative, labeled, and not presented as a verbatim company source.</p>
-        </details>
       </header>
+
+      <details className="dataset-disclosure">
+        <summary>
+          <strong>MVP demo data</strong>
+          <span className="dataset-summary-copy">No external financial-data or AI API is connected</span>
+          <span className="dataset-action">Data methodology</span>
+        </summary>
+        <div className="dataset-methodology">
+          <p>This public MVP uses typed, representative records stored in the application so the complete workflow runs without credentials. Company selection loads a different record; comparison controls recompute deltas, segment contribution, rankings, evidence, and grounded answers. Ask Delta uses deterministic server logic, and the provider boundary is ready for a verified live-data adapter.</p>
+          <p><strong>Label guide.</strong> Verified means calculated from structured values. Supported adds matching representative commentary. AI Interpretation marks a calculated pattern without a confirmed cause. Materiality combines magnitude, company relevance, and available evidence. Commentary is representative and is not presented as verbatim company disclosure.</p>
+        </div>
+      </details>
 
       <section className="issuer-band">
         <div className="issuer-identity">
           <span className="ticker-block">{analysis.company.ticker}</span>
           <div><h1>{analysis.company.name}</h1><p>{analysis.company.exchange} · {analysis.company.sector} · Period ended {analysis.currentPeriod.ended}</p></div>
         </div>
-        <div className="issuer-trace"><SignalTrace /><span>Period signal acquired</span></div>
         <div className="period-control">
           <span>Compare {analysis.currentPeriod.label}</span>
           <div role="group" aria-label="Comparison period">
@@ -116,7 +119,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
       <div className="research-main">
         <section className="changes-pane" aria-labelledby="changes-title">
           <div className="section-heading changes-heading">
-            <div><h2 id="changes-title">What changed</h2><p aria-live="polite">{analysis.currentPeriod.label} versus {analysis.comparisonPeriod.label}; recalculated from structured values.</p></div>
+            <div><h2 id="changes-title">What changed</h2><p aria-live="polite">{analysis.currentPeriod.label} versus {analysis.comparisonPeriod.label}; ranked by magnitude, relevance, and evidence.</p></div>
             <span>{analysis.insights.length} material observations</span>
           </div>
           <div className="change-list change-list-primary">{analysis.insights.slice(0, 1).map(renderInsight)}</div>
@@ -127,7 +130,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
       </div>
 
       {evidenceOpen && <button className="mobile-scrim" onClick={() => setEvidenceOpen(false)} aria-label="Close evidence overlay" />}
-      <footer className="terminal-footer"><span>{analysis.currentPeriod.label} compared with {analysis.comparisonPeriod.label}</span><span>Analysis period ended {analysis.generatedAt}</span></footer>
+      <footer className="terminal-footer"><span>{analysis.currentPeriod.label} compared with {analysis.comparisonPeriod.label}</span><span>Structured calculations · representative commentary</span></footer>
     </main>
   );
 }

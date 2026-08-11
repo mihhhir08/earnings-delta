@@ -86,8 +86,8 @@ export function EvidencePanel({ insight, open, onClose }: { insight: Insight | n
             ))}
           </div>
           <footer className="evidence-footer">
-            <span>Evidence coverage</span>
-            <strong>{insight.evidence.length} linked items</strong>
+            <span>Evidence shown</span>
+            <strong>{insight.evidence.length} {insight.evidence.length === 1 ? "item" : "items"}</strong>
           </footer>
         </>
       ) : (
