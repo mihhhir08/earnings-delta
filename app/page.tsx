@@ -17,12 +17,9 @@ export default async function HomePage() {
 
     const selectedMetrics = analysis.snapshot.filter((metric) => ["revenue", "grossMargin", "freeCashFlow"].includes(metric.key));
     const topInsight = analysis.insights[0];
-    const calculation = topInsight.evidence.find((item) => item.kind === "structured");
-    const source = topInsight.evidence.find((item) => item.kind === "commentary");
 
     return {
       ticker: company.ticker,
-      name: company.name,
       period: analysis.currentPeriod.label,
       comparison: `vs. ${analysis.comparisonPeriod.label}`,
       metrics: selectedMetrics.map((metric) => ({
@@ -36,8 +33,6 @@ export default async function HomePage() {
         summary: topInsight.summary,
         confidence: topInsight.confidence,
         score: topInsight.score,
-        calculation: calculation?.detail ?? "The period movement is calculated from the reported values.",
-        source: source?.label ?? "No commentary is required to verify this calculation.",
       },
       href: `/research/${company.ticker}`,
     };
