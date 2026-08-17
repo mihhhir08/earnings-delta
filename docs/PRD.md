@@ -11,7 +11,8 @@ Earnings Delta helps investors understand what materially changed between compan
 3. Review the six-metric snapshot and five-period trend.
 4. Scan changes ranked by financial magnitude and company relevance.
 5. Open a finding to inspect its calculation, representative commentary, and confidence.
-6. Ask a supported question about the active company and comparison.
+6. Enter an investment thesis and inspect the planned checks, supporting evidence, counter-evidence, and bounded verdict.
+7. Ask a supported question about the active company and comparison.
 
 ## Current requirements
 
@@ -21,6 +22,8 @@ Earnings Delta helps investors understand what materially changed between compan
 - Rank up to five findings using materiality derived only from financial magnitude and company relevance.
 - Present confidence separately as `Verified`, `Supported`, or `Interpretation`.
 - Keep every numerical finding connected to structured calculations.
+- Stress-test supported theses through a visible scope, plan, calculation, contradiction, and synthesis workflow.
+- Search for contradictory and inconclusive signals before returning a thesis verdict.
 - Clearly label stored commentary as representative rather than verbatim company disclosure.
 - Answer supported questions deterministically from the active company and comparison.
 - Return an explicit insufficiency response when the selected record cannot answer reliably.
@@ -50,7 +53,7 @@ Earnings Delta helps investors understand what materially changed between compan
 
 ## Current scope limits
 
-Authentication, portfolios, alerts, trading, broker connections, live financial feeds, open-ended questions, and persistent user data are outside the current implementation.
+Authentication, portfolios, alerts, trading, recommendations, price targets, broker connections, live financial feeds, open-ended questions, and persistent user data are outside the current implementation.
 
 ## Future extensions
 

@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { AskDelta } from "@/components/ask-delta";
 import { EvidencePanel } from "@/components/evidence-panel";
 import { FinancialTrend } from "@/components/financial-trend";
+import { ThesisStressTest } from "@/components/thesis-stress-test";
 import { formatFinancialValue } from "@/lib/finance/analysis";
 import type { ComparisonMode, Insight, ResearchAnalysis } from "@/lib/types";
 
@@ -123,6 +124,7 @@ export function ResearchWorkspace({ analyses, companies }: { analyses: Record<Co
             <span>{analysis.insights.length} material observations</span>
           </div>
           <div className="change-list change-list-primary">{analysis.insights.slice(0, 1).map(renderInsight)}</div>
+          <ThesisStressTest key={`thesis-${analysis.company.ticker}-${mode}`} ticker={analysis.company.ticker} mode={mode} currentPeriod={analysis.currentPeriod.label} comparisonPeriod={analysis.comparisonPeriod.label} />
           <AskDelta key={`${analysis.company.ticker}-${mode}`} ticker={analysis.company.ticker} mode={mode} currentPeriod={analysis.currentPeriod.label} comparisonPeriod={analysis.comparisonPeriod.label} />
           <div className="change-list change-list-rest">{analysis.insights.slice(1).map((insight, index) => renderInsight(insight, index + 1))}</div>
         </section>

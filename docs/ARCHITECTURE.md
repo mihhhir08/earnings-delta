@@ -8,6 +8,7 @@ Earnings Delta is a single Next.js App Router application with no database or se
 Browser
   ├─ /                         Landing page
   └─ /research/[ticker]        Research workspace
+       ├─ /api/research        Validated thesis stress-test route
        └─ /api/ask             Validated deterministic question route
                 ↓
         FinancialDataProvider
@@ -25,7 +26,8 @@ Browser
 - `lib/providers/` defines the data-provider contract and in-memory representative implementation.
 - `lib/finance/` owns changes, formatting, materiality, confidence assignment, and finding generation.
 - `lib/research/` maps supported questions to the active deterministic analysis.
-- `lib/schemas.ts` validates question requests and responses with Zod.
+- `lib/research/stress-test.ts` scopes a thesis, schedules checks, seeks counter-evidence, and synthesizes a bounded verdict.
+- `lib/schemas.ts` validates research and question requests and responses with Zod.
 
 ## Data flow
 
@@ -34,7 +36,12 @@ Browser
 3. The analysis selects the latest, prior-quarter, and prior-year periods and calculates financial changes.
 4. Finding generation computes materiality, assigns confidence, and attaches calculation or commentary evidence.
 5. The client switches between quarter-over-quarter and year-over-year analysis already calculated on the server.
-6. `/api/ask` validates a question, resolves it against supported metrics or findings, and returns a validated response.
+6. `/api/research` validates a thesis and runs the deterministic scope, plan, calculation, contradiction, and synthesis loop.
+7. `/api/ask` validates a question, resolves it against supported metrics or findings, and returns a validated response.
+
+## Thesis stress test
+
+`lib/research/stress-test.ts` recognizes supported financial themes, selects comparison checks from the active record, classifies each result as supporting, challenging, or contextual, and returns a verdict with the complete research path. It does not expose hidden model reasoning or call an external model. Every displayed signal is derived from the same typed financial analysis used by the workspace.
 
 ## Materiality and confidence
 

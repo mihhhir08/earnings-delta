@@ -62,7 +62,7 @@ export function EvidencePanel({ insight, open, onClose }: { insight: Insight | n
         <>
           <header className="evidence-header">
             <div>
-              <span className="panel-id">Evidence trail · {insight.id.replaceAll("-", " ")}</span>
+          <span className="panel-id">Lead finding evidence · {insight.id.replaceAll("-", " ")}</span>
               <h2>{insight.title}</h2>
             </div>
             <button className="icon-button" onClick={onClose} aria-label="Close evidence"><CloseIcon /></button>

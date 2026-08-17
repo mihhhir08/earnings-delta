@@ -92,3 +92,36 @@ export interface ResearchAnalysis {
   trend: TrendPoint[];
   insights: Insight[];
 }
+
+export type ThesisVerdict = "Supported" | "Mixed" | "Challenged" | "Insufficient";
+export type ThesisEvidenceStance = "supports" | "challenges" | "context";
+
+export interface ThesisResearchStep {
+  id: string;
+  label: string;
+  detail: string;
+}
+
+export interface ThesisEvidence {
+  id: string;
+  label: string;
+  value: string;
+  detail: string;
+  stance: ThesisEvidenceStance;
+}
+
+export interface ThesisResearchRun {
+  thesis: string;
+  scope: string;
+  verdict: ThesisVerdict;
+  confidence: Confidence;
+  summary: string;
+  steps: ThesisResearchStep[];
+  evidence: ThesisEvidence[];
+  limitation: string;
+}
+
+export type ThesisResearchEvent =
+  | { type: "stage"; step: ThesisResearchStep }
+  | { type: "result"; run: ThesisResearchRun }
+  | { type: "error"; message: string };

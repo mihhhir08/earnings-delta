@@ -79,7 +79,7 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
                 </span>
               ))}
             </h1>
-            <p>Earnings Delta turns quarterly results into ranked explanations backed by visible evidence.</p>
+            <p>Earnings Delta turns quarterly results into ranked explanations—and stress-tests your thesis against visible evidence.</p>
             <div className="hero-actions">
               <Link className="primary-action" href={active.href}>Open research workspace <ArrowIcon /></Link>
               <a className="secondary-action" href="#proof">How it works <ArrowIcon /></a>
@@ -120,10 +120,11 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
       </section>
 
       <section className="proof-section" id="proof">
-        <h2>From filing to finding.</h2>
+        <h2>From filing to challenged thesis.</h2>
         <div className="proof-flow">
           <article><strong>Compare</strong><p>Normalize reporting periods and calculate the movement.</p></article>
           <article><strong>Explain</strong><p>Rank the operating changes that matter.</p></article>
+          <article><strong>Challenge</strong><p>Plan independent checks and search for evidence against your claim.</p></article>
           <article><strong>Verify</strong><p>Trace each conclusion to its calculation and representative commentary.</p></article>
         </div>
       </section>
@@ -136,7 +137,7 @@ export function LandingExperience({ previews }: { previews: LandingPreview[] }) 
         </div>
         <div className="project-outcome">
           <strong>A complete research workflow.</strong>
-          <span>Structured comparisons · ranked changes · traceable evidence</span>
+          <span>Structured comparisons · thesis stress tests · traceable evidence</span>
           <Link className="primary-action" href={active.href}>Open research workspace <ArrowIcon /></Link>
         </div>
       </section>

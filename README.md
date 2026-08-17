@@ -15,6 +15,7 @@ Earnings Delta is an evidence-first financial research workspace. It compares re
 - Material changes ranked by financial magnitude and company relevance
 - Separate confidence labels: `Verified`, `Supported`, and `Interpretation`
 - Evidence panel with calculations, representative commentary, and interpretation boundaries
+- Thesis stress tests that plan checks, run comparisons, seek contradictory evidence, and return a bounded verdict
 - Deterministic answers for supported questions about the active company and comparison
 
 ## Data and research model
@@ -26,11 +27,11 @@ Materiality and confidence answer different questions:
 - **Materiality** reflects the magnitude of a financial movement and its relevance to the company. Internally, magnitude contributes up to 75 points and relevance up to 25 points; evidence availability does not affect this score.
 - **Confidence** describes the support behind a finding. `Verified` is calculated from structured values, `Supported` adds matching representative commentary, and `Interpretation` identifies a calculated pattern whose cause is not established.
 
-The question interface uses deterministic intent matching. It can answer about revenue, gross margin, operating income, net income, diluted EPS, segment revenue movement, operating income relative to revenue growth, and free-cash-flow divergence. Unsupported questions return a clear scope limitation.
+The thesis stress test maps a claim to relevant financial checks, evaluates both supporting and contradictory signals, and exposes the complete research path. The question interface uses deterministic intent matching for revenue, gross margin, operating income, net income, diluted EPS, segment revenue movement, operating income relative to revenue growth, and free-cash-flow divergence. Unsupported claims and questions return clear scope limitations.
 
 ## Architecture
 
-Earnings Delta is a single Next.js App Router application. Server components obtain company records through a `FinancialDataProvider`; deterministic finance modules compute comparisons and findings; client components manage comparison controls, evidence inspection, and questions. A Zod-validated route handler serves question responses. There is no database or separate backend service.
+Earnings Delta is a single Next.js App Router application. Server components obtain company records through a `FinancialDataProvider`; deterministic finance modules compute comparisons and findings; client components manage comparison controls, evidence inspection, thesis stress tests, and questions. Zod-validated route handlers serve research runs and question responses. There is no database or separate backend service.
 
 See [Architecture](docs/ARCHITECTURE.md) and [Product requirements](docs/PRD.md).
 

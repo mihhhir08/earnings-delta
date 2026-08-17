@@ -5,3 +5,6 @@ coverage
 .vercel
 .DS_Store
 *.tsbuildinfo
+.impeccable/
+AGENTS.md
+CLAUDE.md

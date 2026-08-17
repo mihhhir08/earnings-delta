@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { answerGroundedQuestion } from "../lib/research/answer";
 import { companyData } from "../lib/data/companies";
 import { analyzeCompany, calculateChange, materialityScore, segmentContribution } from "../lib/finance/analysis";
+import { runThesisStressTest } from "../lib/research/stress-test";
 
 describe("financial change calculations", () => {
   it("calculates absolute and percentage change", () => {
@@ -103,5 +104,63 @@ describe("representative research demo", () => {
 
     expect(answer.limited).toBe(true);
     expect(answer.answer).toContain("does not establish a separate cause");
+  });
+
+  it("stress-tests a thesis with supporting and contradictory checks", async () => {
+    const company = companyData.find(({ ticker }) => ticker === "NVDA")!;
+    const run = await runThesisStressTest(company, "qoq", "Growth quality strengthened across the business.");
+
+    expect(run.steps.map(({ id }) => id)).toEqual(["scope", "plan", "calculate", "challenge", "synthesize"]);
+    expect(run.evidence.length).toBe(4);
+    expect(run.evidence.some(({ stance }) => stance === "supports")).toBe(true);
+    expect(run.evidence.some(({ stance }) => stance === "challenges")).toBe(true);
+    expect(run.verdict).toBe("Challenged");
+  });
+
+  it("returns a bounded result for an unsupported thesis", async () => {
+    const company = companyData.find(({ ticker }) => ticker === "AAPL")!;
+    const run = await runThesisStressTest(company, "yoy", "The stock will outperform next year.");
+
+    expect(run.verdict).toBe("Insufficient");
+    expect(run.evidence).toHaveLength(0);
+    expect(run.limitation).toContain("Try a thesis about");
+  });
+
+  it.each([
+    "Growth quality strengthened across the business.",
+    "Revenue grew this quarter.",
+    "Gross margin expanded.",
+    "Operating leverage improved.",
+    "Cash generation improved.",
+    "Revenue became more concentrated by segment.",
+  ])("maps each supported thesis topic: %s", async (thesis) => {
+    const company = companyData.find(({ ticker }) => ticker === "NVDA")!;
+    const run = await runThesisStressTest(company, "qoq", thesis);
+
+    expect(run.verdict).not.toBe("Insufficient");
+    expect(run.evidence.length).toBeGreaterThan(0);
+  });
+
+  it("inverts evidence classification for a negative thesis", async () => {
+    const company = companyData.find(({ ticker }) => ticker === "NVDA")!;
+    const run = await runThesisStressTest(company, "qoq", "Gross margin weakened this quarter.");
+
+    expect(run.evidence[0]).toMatchObject({ id: "gross-margin", stance: "supports" });
+  });
+
+  it("treats movements below the margin threshold as context", async () => {
+    const company = structuredClone(companyData.find(({ ticker }) => ticker === "NVDA")!);
+    company.periods[0].metrics.grossMargin = company.periods[1].metrics.grossMargin! + 0.1;
+    const run = await runThesisStressTest(company, "qoq", "Gross margin expanded.");
+
+    expect(run.evidence[0]).toMatchObject({ id: "gross-margin", stance: "context" });
+  });
+
+  it("keeps shared-metric checks distinct and counted once", async () => {
+    const company = companyData.find(({ ticker }) => ticker === "NVDA")!;
+    const run = await runThesisStressTest(company, "qoq", "Growth quality strengthened across the business.");
+
+    expect(new Set(run.evidence.map(({ id }) => id)).size).toBe(run.evidence.length);
+    expect(run.steps.find(({ id }) => id === "plan")?.detail).toBe("Selected 4 comparison checks.");
   });
 });
